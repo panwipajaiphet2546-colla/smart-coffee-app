@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart Coffee AI Assistant</title>
+  <style>
+    :root { --ink:#28201c; --muted:#7b706a; --cream:#f8f4ed; --paper:#fffdf9; --line:#eadfd3; --coffee:#643b29; --orange:#d87436; --sage:#4f7665; --shadow:0 16px 40px rgba(73,44,29,.09); }
+    * { box-sizing:border-box; } body { margin:0; font-family:system-ui,-apple-system,"Segoe UI",sans-serif; color:var(--ink); background:var(--cream); }
+    .app { min-height:100vh; display:grid; grid-template-columns:248px 1fr; }
+    aside { background:#30231e; color:#f8eee5; padding:28px 16px; display:flex; flex-direction:column; gap:26px; }
+    .brand { display:flex; gap:11px; align-items:center; padding:0 10px; font-weight:750; line-height:1.1; }
+    .bean { width:35px; height:35px; border-radius:50% 48% 52% 48%; background:#df7d40; position:relative; transform:rotate(-25deg); } .bean:after { content:""; position:absolute; inset:4px 15px 4px 15px; border-left:2px solid #6a3825; border-radius:50%; }
+    .brand small { display:block; color:#bcaea6; font-size:11px; font-weight:500; margin-top:4px; letter-spacing:.04em; }
+    nav { display:grid; gap:5px; } .nav-title { color:#a79890; text-transform:uppercase; font-size:10px; letter-spacing:.12em; margin:8px 11px; }
+    .nav-item { color:#d6c8c0; border:0; background:transparent; text-align:left; border-radius:9px; padding:11px; cursor:pointer; font-size:14px; display:flex; align-items:center; gap:11px; }
+    .nav-item:hover,.nav-item.active { background:#503a30; color:white; } .nav-item.active { box-shadow:inset 3px 0 #e28242; } .ico { width:18px; text-align:center; }
+    .profile { margin-top:auto; border-top:1px solid #594137; padding:19px 10px 0; display:flex; gap:10px; align-items:center; font-size:13px; } .avatar { width:31px; height:31px; border-radius:50%; display:grid; place-items:center; background:#8eaa95; color:#163328; font-weight:800; }
+    main { padding:29px 36px 36px; max-width:1500px; width:100%; margin:auto; } header { display:flex; justify-content:space-between; align-items:center; margin-bottom:27px; }
+    h1 { font-size:27px; margin:0; letter-spacing:-.04em; } header p { margin:5px 0 0; color:var(--muted); font-size:14px; } .date { color:var(--muted); font-size:13px; }
+    .top { display:grid; grid-template-columns:1.15fr .85fr; gap:20px; } .card { background:var(--paper); border:1px solid var(--line); box-shadow:var(--shadow); border-radius:15px; }
+    .hero { padding:27px 28px; background:linear-gradient(120deg,#68402d,#8a5134); color:#fff9f3; position:relative; overflow:hidden; } .hero:after { content:""; position:absolute; height:290px; width:290px; border:28px solid rgba(255,255,255,.06); border-radius:50%; right:-110px; top:-118px; }
+    .eyebrow { color:#f5bd91; text-transform:uppercase; letter-spacing:.13em; font-size:10px; font-weight:700; } .hero h2 { max-width:420px; font-size:26px; line-height:1.23; letter-spacing:-.035em; margin:11px 0; } .hero p { max-width:480px; color:#ead9ce; line-height:1.6; font-size:14px; }
+    .hero button { border:0; color:#5d3525; background:#fff8f0; padding:10px 15px; border-radius:8px; font-weight:750; cursor:pointer; margin-top:5px; }
+    .workflow { padding:23px; } .card-title { display:flex; justify-content:space-between; align-items:center; font-weight:750; } .card-title span { color:var(--muted); font-size:12px; font-weight:500; } .steps { margin-top:21px; display:grid; grid-template-columns:repeat(4,1fr); position:relative; } .steps:before { content:""; position:absolute; height:2px; left:16px; right:16px; top:16px; background:#e7dbcf; } .step { z-index:1; font-size:11px; color:var(--muted); } .dot { height:33px; width:33px; border-radius:50%; display:grid; place-items:center; color:white; font-size:13px; font-weight:bold; margin-bottom:9px; background:#c8b9ac; } .done .dot { background:var(--sage); } .current .dot { background:var(--orange); box-shadow:0 0 0 5px #fbe4d4; } .step b { display:block; color:var(--ink); font-size:12px; margin-bottom:3px; }
+    .metrics { display:grid; grid-template-columns:repeat(4,1fr); gap:15px; margin:20px 0; } .metric { padding:18px; } .metric label { display:block; color:var(--muted); font-size:12px; margin-bottom:10px; } .metric strong { font-size:24px; letter-spacing:-.04em; } .metric .trend { color:var(--sage); font-size:11px; margin-left:5px; }
+    .grid { display:grid; grid-template-columns:1.12fr .88fr; gap:20px; } .section { padding:23px; } .section h3 { margin:0; font-size:16px; } .section-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; } .link { color:var(--coffee); border:0; background:none; font-size:12px; font-weight:700; cursor:pointer; }
+    table { border-collapse:collapse; width:100%; font-size:13px; } th { text-align:left; color:var(--muted); font-size:11px; font-weight:600; padding:10px 8px; border-bottom:1px solid var(--line); } td { padding:13px 8px; border-bottom:1px solid #f1e9e2; } .supplier { font-weight:700; } .sub { display:block; color:var(--muted); font-size:11px; margin-top:3px; } .pill { border-radius:20px; padding:4px 8px; font-weight:650; font-size:10px; white-space:nowrap; } .pending { color:#9b4f1f; background:#fff0df; } .approved { color:#34705b; background:#e7f3ed; } .review { color:#755c1f; background:#faf3d8; }
+    .chat { display:flex; flex-direction:column; min-height:349px; } .messages { flex:1; padding:15px 0 5px; display:grid; gap:12px; } .message { max-width:88%; padding:10px 12px; border-radius:10px; line-height:1.5; font-size:13px; } .bot { background:#f5eee7; border-top-left-radius:2px; } .user { margin-left:auto; background:#6c4130; color:white; border-top-right-radius:2px; } .source { color:#a05b34; font-size:11px; margin-top:5px; font-weight:650; }
+    .chat-form { display:flex; border-top:1px solid var(--line); padding-top:15px; gap:8px; } input { min-width:0; flex:1; padding:10px 12px; border:1px solid #d9cbbf; border-radius:8px; outline-color:#b86b40; font:inherit; font-size:12px; } .send { background:var(--orange); color:white; border:0; border-radius:8px; padding:0 14px; cursor:pointer; font-weight:700; }
+    .toast { position:fixed; right:24px; bottom:24px; background:#253c32; color:white; padding:12px 16px; border-radius:9px; box-shadow:var(--shadow); transform:translateY(100px); transition:.25s; font-size:13px; } .toast.show { transform:translateY(0); }
+    @media(max-width:900px){ .app{grid-template-columns:1fr} aside{display:none} main{padding:22px 17px}.top,.grid{grid-template-columns:1fr}.metrics{grid-template-columns:repeat(2,1fr)}header .date{display:none} }
+    @media(max-width:520px){.steps{gap:7px}.step{font-size:9px}.metric{padding:14px}.hero h2{font-size:22px}table{font-size:11px}th,td{padding:9px 4px}}
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside>
+      <div class="brand"><i class="bean"></i><div>Smart Coffee<small>AI PROCUREMENT</small></div></div>
+      <nav>
+        <div class="nav-title">Overview</div><button class="nav-item active"><span class="ico">▦</span>แดชบอร์ด</button><button class="nav-item"><span class="ico">✦</span>ผู้ช่วย AI</button>
+        <div class="nav-title">Procurement</div><button class="nav-item"><span class="ico">◫</span>คำขอจัดซื้อ</button><button class="nav-item"><span class="ico">▤</span>ใบสั่งซื้อ</button><button class="nav-item"><span class="ico">♙</span>ผู้จำหน่าย</button><button class="nav-item"><span class="ico">✓</span>รับสินค้า</button>
+        <div class="nav-title">Workspace</div><button class="nav-item"><span class="ico">▱</span>คลังเอกสาร</button><button class="nav-item"><span class="ico">◷</span>ประวัติการทำงาน</button>
+      </nav>
+      <div class="profile"><div class="avatar">PK</div><div><b>พิชญา กาแฟดี</b><small style="display:block;color:#bcaea6;margin-top:3px">Procurement Manager</small></div></div>
+    </aside>
+    <main>
+      <header><div><h1>สวัสดี, พิชญา ☕</h1><p>ภาพรวมงานจัดซื้อเมล็ดกาแฟของคุณวันนี้</p></div><div style="display:flex;align-items:center;gap:14px"><button class="link" id="saveHtml" style="border:1px solid var(--line);border-radius:8px;padding:8px 11px;background:var(--paper)">⌄ บันทึก HTML</button><div class="date" id="today"></div></div></header>
+      <div class="top">
+        <section class="card hero"><div class="eyebrow">AI Procurement Insight</div><h2>ตัดสินใจจัดซื้ออย่างมั่นใจ ด้วยข้อมูลที่ครบถ้วน</h2><p>ให้ AI ช่วยเปรียบเทียบผู้จำหน่าย ค้นหานโยบาย และสรุปเอกสารจัดซื้อของคุณได้ทันที</p><button id="askAi">เริ่มถามผู้ช่วย AI →</button></section>
+        <section class="card workflow"><div class="card-title">สถานะกระบวนการจัดซื้อ <span>คำขอ PR-2026-071</span></div><div class="steps"><div class="step done"><div class="dot">✓</div><b>คำขอซื้อ</b>เสร็จสิ้น</div><div class="step done"><div class="dot">✓</div><b>อนุมัติ</b>เสร็จสิ้น</div><div class="step current"><div class="dot">3</div><b>สั่งซื้อ</b>กำลังดำเนินการ</div><div class="step"><div class="dot">4</div><b>รับสินค้า</b>รอดำเนินการ</div></div></section>
+      </div>
+      <section class="metrics"><div class="card metric"><label>คำขอรออนุมัติ</label><strong>08</strong><span class="trend">↓ 2 จากสัปดาห์ก่อน</span></div><div class="card metric"><label>ใบสั่งซื้อที่เปิดอยู่</label><strong>14</strong><span class="trend">↑ 4 รายการ</span></div><div class="card metric"><label>มูลค่าจัดซื้อเดือนนี้</label><strong>฿482K</strong><span class="trend">↑ 12.5%</span></div><div class="card metric"><label>คะแนนผู้จำหน่ายเฉลี่ย</label><strong>4.6</strong><span class="trend">/ 5.0</span></div></section>
+      <div class="grid">
+        <section class="card section"><div class="section-head"><h3>คำสั่งซื้อล่าสุด</h3><button class="link">ดูทั้งหมด</button></div><table><thead><tr><th>เลขที่</th><th>ผู้จำหน่าย</th><th>รายการ</th><th>สถานะ</th></tr></thead><tbody><tr><td>PO-2607-024</td><td class="supplier">เชียงใหม่ อาราบิก้า<span class="sub">฿84,000</span></td><td>เมล็ดคั่วกลาง 120 กก.</td><td><span class="pill pending">รอส่งสินค้า</span></td></tr><tr><td>PO-2607-023</td><td class="supplier">Doi Chang Coffee<span class="sub">฿126,500</span></td><td>เมล็ดพิเศษ 150 กก.</td><td><span class="pill approved">อนุมัติแล้ว</span></td></tr><tr><td>PO-2607-021</td><td class="supplier">Hillkoff<span class="sub">฿58,200</span></td><td>เมล็ดคั่วเข้ม 80 กก.</td><td><span class="pill review">ตรวจรับสินค้า</span></td></tr></tbody></table></section>
+        <section class="card section chat" id="chat"><div class="section-head"><h3>✦ ผู้ช่วยจัดซื้อ AI</h3><span class="pill approved">ออนไลน์</span></div><div class="messages" id="messages"><div class="message bot">สวัสดีค่ะ มีอะไรให้ช่วยเกี่ยวกับการจัดซื้อเมล็ดกาแฟวันนี้ไหมคะ?<div class="source">อ้างอิงจากคลังเอกสารของคุณ</div></div><div class="message user">ช่วยสรุปผู้จำหน่ายที่มีคะแนนสูงสุด</div><div class="message bot">จากการประเมิน 3 เดือนล่าสุด <b>เชียงใหม่ อาราบิก้า</b> ได้คะแนนสูงสุด 4.8/5 โดยเด่นด้านคุณภาพเมล็ดและความตรงต่อเวลา<div class="source">เอกสาร: Supplier Evaluation Q2/2026</div></div></div><form class="chat-form" id="chatForm"><input id="question" placeholder="พิมพ์คำถามเกี่ยวกับงานจัดซื้อ..." autocomplete="off" /><button class="send">ส่ง</button></form></section>
+      </div>
+    </main>
+  </div><div class="toast" id="toast"></div>
+  <script>
+    const thaiDate = new Intl.DateTimeFormat('th-TH',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(new Date());
+    document.getElementById('today').textContent=thaiDate;
+    const toast=t=>{const e=document.getElementById('toast');e.textContent=t;e.classList.add('show');setTimeout(()=>e.classList.remove('show'),2600)};
+    document.querySelectorAll('.nav-item').forEach(b=>b.addEventListener('click',()=>{document.querySelector('.nav-item.active').classList.remove('active');b.classList.add('active');toast('เปิดเมนู '+b.textContent.trim())}));
+    document.getElementById('askAi').onclick=()=>{document.getElementById('chat').scrollIntoView({behavior:'smooth',block:'center'});document.getElementById('question').focus()};
+    document.getElementById('saveHtml').onclick=()=>{const html='<!doctype html>\n'+document.documentElement.outerHTML;const file=new Blob([html],{type:'text/html;charset=utf-8'});const url=URL.createObjectURL(file);const a=document.createElement('a');a.href=url;a.download='smart-coffee-ai-assistant.html';a.click();URL.revokeObjectURL(url);toast('กำลังบันทึกไฟล์ HTML')};
+    document.getElementById('chatForm').addEventListener('submit',e=>{e.preventDefault();const input=document.getElementById('question'), q=input.value.trim();if(!q)return;const messages=document.getElementById('messages');messages.insertAdjacentHTML('beforeend',`<div class="message user"></div>`);messages.lastElementChild.textContent=q;input.value='';setTimeout(()=>{messages.insertAdjacentHTML('beforeend','<div class="message bot">ได้รับคำถามแล้วค่ะ ระบบ AI จะค้นหาข้อมูลจากใบสั่งซื้อ เอกสาร และการประเมินผู้จำหน่าย เพื่อจัดทำคำตอบพร้อมแหล่งอ้างอิงให้คุณ<div class="source">RAG • คลังเอกสารจัดซื้อ</div></div>');messages.scrollTop=messages.scrollHeight},450)});
+  </script>
+</body>
+</html>
