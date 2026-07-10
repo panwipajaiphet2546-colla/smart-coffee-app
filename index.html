@@ -11,13 +11,27 @@
     .app { min-height:100vh; display:grid; grid-template-columns:248px 1fr; }
     
     /* เมนูด้านข้าง (Sidebar) */
-    aside { background:#30231e; color:#f8eee5; padding:28px 16px; display:flex; flex-direction:column; gap:26px; }
+    aside { background:#30231e; color:#f8eee5; padding:28px 16px; display:flex; flex-direction:column; gap:26px; overflow-y:auto; }
     .brand { display:flex; gap:11px; align-items:center; padding:0 10px; font-weight:750; line-height:1.1; }
     .bean { width:35px; height:35px; border-radius:50% 48% 52% 48%; background:#df7d40; position:relative; transform:rotate(-25deg); } .bean:after { content:""; position:absolute; inset:4px 15px 4px 15px; border-left:2px solid #6a3825; border-radius:50%; }
     .brand small { display:block; color:#bcaea6; font-size:11px; font-weight:500; margin-top:4px; letter-spacing:.04em; }
+    
+    /* สไตล์สำหรับเมนูที่สร้างจาก JS */
     nav { display:grid; gap:5px; } .nav-title { color:#a79890; text-transform:uppercase; font-size:10px; letter-spacing:.12em; margin:8px 11px; }
-    .nav-item { color:#d6c8c0; border:0; background:transparent; text-align:left; border-radius:9px; padding:11px; cursor:pointer; font-size:14px; display:flex; align-items:center; gap:11px; transition: 0.2s; }
+    .nav-item-wrapper { display: flex; align-items: center; justify-content: space-between; gap: 5px; }
+    .nav-item { width: 100%; color:#d6c8c0; border:0; background:transparent; text-align:left; border-radius:9px; padding:11px; cursor:pointer; font-size:14px; display:flex; align-items:center; gap:11px; transition: 0.2s; }
     .nav-item:hover,.nav-item.active { background:#503a30; color:white; } .nav-item.active { box-shadow:inset 3px 0 #e28242; } .ico { width:18px; text-align:center; }
+    .del-menu { background:none; border:none; color:#ff6b6b; cursor:pointer; font-size:14px; display:none; padding: 5px; } 
+    .editing .del-menu { display:block; } .editing .nav-item { width: 85%; }
+    
+    /* ฟอร์มเพิ่มเมนูใหม่ด้านซ้าย */
+    .menu-edit-form { display:none; flex-direction:column; gap:8px; margin-top:10px; padding:15px; background:#3f2e26; border-radius:8px; border:1px solid #594137; }
+    .menu-edit-form.active { display:flex; }
+    .menu-edit-form input { padding:8px; border-radius:6px; border:1px solid #594137; background:#281d19; color:white; font-size:12px; outline:none; }
+    .menu-edit-form button { background:var(--orange); color:white; border:none; padding:8px; border-radius:6px; cursor:pointer; font-weight:bold; font-size:12px; }
+    .btn-toggle-edit { background:none; border:1px dashed #594137; color:#bcaea6; padding:8px; border-radius:8px; cursor:pointer; font-size:12px; transition:0.2s; margin-top:10px; width: 100%; }
+    .btn-toggle-edit:hover { background:#3f2e26; color:white; }
+
     .profile { margin-top:auto; border-top:1px solid #594137; padding:19px 10px 0; display:flex; gap:10px; align-items:center; font-size:13px; } .avatar { width:31px; height:31px; border-radius:50%; display:grid; place-items:center; background:#8eaa95; color:#163328; font-weight:800; }
     
     /* ส่วนเนื้อหาหลัก (Main Content) */
@@ -26,8 +40,7 @@
     .top { display:grid; grid-template-columns:1.15fr .85fr; gap:20px; } .card { background:var(--paper); border:1px solid var(--line); box-shadow:var(--shadow); border-radius:15px; }
     .hero { padding:27px 28px; background:linear-gradient(120deg,#68402d,#8a5134); color:#fff9f3; position:relative; overflow:hidden; } .hero:after { content:""; position:absolute; height:290px; width:290px; border:28px solid rgba(255,255,255,.06); border-radius:50%; right:-110px; top:-118px; }
     .eyebrow { color:#f5bd91; text-transform:uppercase; letter-spacing:.13em; font-size:10px; font-weight:700; } .hero h2 { max-width:420px; font-size:26px; line-height:1.23; letter-spacing:-.035em; margin:11px 0; } .hero p { max-width:480px; color:#ead9ce; line-height:1.6; font-size:14px; }
-    .hero button { border:0; color:#5d3525; background:#fff8f0; padding:10px 15px; border-radius:8px; font-weight:750; cursor:pointer; margin-top:5px; transition: 0.2s; }
-    .hero button:hover { background: white; transform: translateY(-2px); }
+    .hero button { border:0; color:#5d3525; background:#fff8f0; padding:10px 15px; border-radius:8px; font-weight:750; cursor:pointer; margin-top:5px; transition: 0.2s; } .hero button:hover { background: white; transform: translateY(-2px); }
     .workflow { padding:23px; } .card-title { display:flex; justify-content:space-between; align-items:center; font-weight:750; } .card-title span { color:var(--muted); font-size:12px; font-weight:500; } .steps { margin-top:21px; display:grid; grid-template-columns:repeat(4,1fr); position:relative; } .steps:before { content:""; position:absolute; height:2px; left:16px; right:16px; top:16px; background:#e7dbcf; } .step { z-index:1; font-size:11px; color:var(--muted); } .dot { height:33px; width:33px; border-radius:50%; display:grid; place-items:center; color:white; font-size:13px; font-weight:bold; margin-bottom:9px; background:#c8b9ac; } .done .dot { background:var(--sage); } .current .dot { background:var(--orange); box-shadow:0 0 0 5px #fbe4d4; } .step b { display:block; color:var(--ink); font-size:12px; margin-bottom:3px; }
     
     /* สถิติและตาราง */
@@ -35,9 +48,8 @@
     .grid { display:grid; grid-template-columns:1.12fr .88fr; gap:20px; } .section { padding:23px; } .section h3 { margin:0; font-size:16px; } .section-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; } .link { color:var(--coffee); border:0; background:none; font-size:12px; font-weight:700; cursor:pointer; transition: 0.2s; } .link:hover { color: var(--orange); }
     table { border-collapse:collapse; width:100%; font-size:13px; } th { text-align:left; color:var(--muted); font-size:11px; font-weight:600; padding:10px 8px; border-bottom:1px solid var(--line); } td { padding:13px 8px; border-bottom:1px solid #f1e9e2; } .supplier { font-weight:700; } .sub { display:block; color:var(--muted); font-size:11px; margin-top:3px; } .pill { border-radius:20px; padding:4px 8px; font-weight:650; font-size:10px; white-space:nowrap; } .pending { color:#9b4f1f; background:#fff0df; } .approved { color:#34705b; background:#e7f3ed; } .review { color:#755c1f; background:#faf3d8; }
     
-    /* ฟอร์มเพิ่มข้อมูล */
-    .add-form { display: none; grid-template-columns: 1fr 1fr 1fr auto; gap: 10px; background: #f5eee7; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid var(--line); }
-    .add-form.active { display: grid; }
+    /* ฟอร์มเพิ่มข้อมูลตาราง */
+    .add-form { display: none; grid-template-columns: 1fr 1fr 1fr auto; gap: 10px; background: #f5eee7; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid var(--line); } .add-form.active { display: grid; }
     .add-form input { padding: 8px 12px; border: 1px solid #d9cbbf; border-radius: 6px; font-size: 13px; outline-color: var(--orange); }
     .btn-delete { color: #d87436; background: none; border: none; cursor: pointer; font-size: 14px; font-weight: bold; } .btn-delete:hover { color: red; }
     
@@ -48,35 +60,34 @@
     /* การแจ้งเตือน Toast */
     .toast { position:fixed; right:24px; bottom:24px; background:#253c32; color:white; padding:12px 16px; border-radius:9px; box-shadow:var(--shadow); transform:translateY(100px); transition:.25s; font-size:13px; z-index: 100; } .toast.show { transform:translateY(0); }
     
-    /* รองรับหน้าจอมือถือ */
     @media(max-width:900px){ .app{grid-template-columns:1fr} aside{display:none} main{padding:22px 17px}.top,.grid{grid-template-columns:1fr}.metrics{grid-template-columns:repeat(2,1fr)}header .date{display:none} .add-form { grid-template-columns: 1fr; } }
-    @media(max-width:520px){.steps{gap:7px}.step{font-size:9px}.metric{padding:14px}.hero h2{font-size:22px}table{font-size:11px}th,td{padding:9px 4px}}
   </style>
 </head>
 <body>
   <div class="app">
     
-    <!-- เมนูด้านข้าง (แก้ไข เพิ่ม/ลบ เมนูได้ที่ส่วนนี้) -->
+    <!-- เมนูด้านข้าง จะถูกสร้างและจัดการโดย JavaScript ทั้งหมด -->
     <aside>
       <div class="brand"><i class="bean"></i><div>Smart Coffee<small>AI PROCUREMENT</small></div></div>
-      <nav>
-        <div class="nav-title">Overview</div>
-        <button class="nav-item active"><span class="ico">▦</span>แดชบอร์ด</button>
-        <button class="nav-item"><span class="ico">✦</span>ผู้ช่วย AI</button>
-        
-        <div class="nav-title">Procurement</div>
-        <button class="nav-item"><span class="ico">◫</span>คำขอจัดซื้อ</button>
-        <button class="nav-item"><span class="ico">▤</span>ใบสั่งซื้อ</button>
-        <button class="nav-item"><span class="ico">♙</span>ผู้จำหน่าย</button>
-        <button class="nav-item"><span class="ico">✓</span>รับสินค้า</button>
-        
-        <!-- ตัวอย่าง: คุณสามารถเพิ่มเมนูใหม่ได้แบบนี้ -->
-        <!-- <button class="nav-item"><span class="ico">📦</span>สต็อกสินค้า</button> -->
-        
-        <div class="nav-title">Workspace</div>
-        <button class="nav-item"><span class="ico">▱</span>คลังเอกสาร</button>
-        <button class="nav-item"><span class="ico">◷</span>ประวัติการทำงาน</button>
-      </nav>
+      
+      <!-- พื้นที่สำหรับแสดงเมนู -->
+      <nav id="dynamicNav"></nav>
+      
+      <!-- ปุ่มเปิดโหมดแก้ไขเมนู (Prototype Mode) -->
+      <button class="btn-toggle-edit" id="toggleEditModeBtn">⚙️ จัดการเมนู (Prototype)</button>
+      
+      <!-- ฟอร์มสร้างเมนูใหม่ -->
+      <form class="menu-edit-form" id="newMenuForm">
+        <input type="text" id="newMenuIcon" placeholder="ไอคอน (เช่น 📦, ★)" required>
+        <input type="text" id="newMenuName" placeholder="ชื่อเมนู" required>
+        <select id="newMenuCategory" style="padding:6px; border-radius:4px; border:1px solid #594137; background:#281d19; color:white;">
+            <option value="Overview">Overview</option>
+            <option value="Procurement">Procurement</option>
+            <option value="Workspace">Workspace</option>
+        </select>
+        <button type="submit">+ บันทึกเมนูใหม่</button>
+      </form>
+
       <div class="profile"><div class="avatar">PK</div><div><b>พิชญา กาแฟดี</b><small style="display:block;color:#bcaea6;margin-top:3px">Procurement Manager</small></div></div>
     </aside>
 
@@ -84,8 +95,6 @@
       <header>
         <div><h1>สวัสดี, พิชญา ☕</h1><p>ภาพรวมงานจัดซื้อเมล็ดกาแฟของคุณวันนี้</p></div>
         <div style="display:flex;align-items:center;gap:14px">
-          <!-- ปุ่มบันทึกไฟล์ (ซ่อนไว้ก่อนได้ถ้าไม่ใช้บนกิตฮับแล้ว) -->
-          <button class="link" id="saveHtml" style="border:1px solid var(--line);border-radius:8px;padding:8px 11px;background:var(--paper)">⌄ บันทึก HTML</button>
           <div class="date" id="today"></div>
         </div>
       </header>
@@ -98,8 +107,6 @@
       <section class="metrics"><div class="card metric"><label>คำขอรออนุมัติ</label><strong>08</strong><span class="trend">↓ 2 จากสัปดาห์ก่อน</span></div><div class="card metric"><label>ใบสั่งซื้อที่เปิดอยู่</label><strong>14</strong><span class="trend">↑ 4 รายการ</span></div><div class="card metric"><label>มูลค่าจัดซื้อเดือนนี้</label><strong>฿482K</strong><span class="trend">↑ 12.5%</span></div><div class="card metric"><label>คะแนนผู้จำหน่ายเฉลี่ย</label><strong>4.6</strong><span class="trend">/ 5.0</span></div></section>
 
       <div class="grid">
-        
-        <!-- ส่วนตารางข้อมูล -->
         <section class="card section">
           <div class="section-head">
             <h3>คำสั่งซื้อล่าสุด</h3>
@@ -108,7 +115,6 @@
             </div>
           </div>
           
-          <!-- ฟอร์มสำหรับเพิ่มข้อมูล -->
           <form class="add-form" id="addOrderForm">
             <input id="inputPo" placeholder="เลขที่ (เช่น PO-2607-xxx)" required>
             <input id="inputSupplier" placeholder="ชื่อผู้จำหน่าย" required>
@@ -116,16 +122,12 @@
             <button type="submit" class="send">บันทึกข้อมูล</button>
           </form>
 
-          <!-- ตารางแสดงข้อมูล -->
           <table>
             <thead><tr><th>เลขที่</th><th>ผู้จำหน่าย</th><th>รายการ</th><th>สถานะ</th><th style="text-align: center;">จัดการ</th></tr></thead>
-            <tbody id="orderTableBody">
-              <!-- ข้อมูลจะถูกโหลดมาแสดงตรงนี้ผ่าน JavaScript -->
-            </tbody>
+            <tbody id="orderTableBody"></tbody>
           </table>
         </section>
 
-        <!-- ส่วนผู้ช่วย AI (Chat) -->
         <section class="card section chat" id="chat">
           <div class="section-head"><h3>✦ ผู้ช่วยจัดซื้อ AI</h3><span class="pill approved">ออนไลน์</span></div>
           <div class="messages" id="messages">
@@ -138,7 +140,6 @@
             <button class="send">ส่ง</button>
           </form>
         </section>
-
       </div>
     </main>
   </div>
@@ -146,55 +147,116 @@
   <div class="toast" id="toast"></div>
 
   <script>
-    // 1. ตั้งค่าวันที่ปัจจุบัน
+    // การตั้งค่าและ UI พื้นฐาน
     const thaiDate = new Intl.DateTimeFormat('th-TH',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(new Date());
     document.getElementById('today').textContent = thaiDate;
+    const toast = (text) => { const e = document.getElementById('toast'); e.textContent = text; e.classList.add('show'); setTimeout(() => e.classList.remove('show'), 2600); };
+    document.getElementById('askAi').onclick = () => { document.getElementById('chat').scrollIntoView({behavior:'smooth',block:'center'}); document.getElementById('question').focus(); };
+
+    // ==========================================
+    // 🟢 ระบบจัดการแถบเมนูด้านซ้าย (Sidebar JS)
+    // ==========================================
     
-    // 2. ฟังก์ชันแจ้งเตือน Toast
-    const toast = (text) => {
-      const e = document.getElementById('toast');
-      e.textContent = text;
-      e.classList.add('show');
-      setTimeout(() => e.classList.remove('show'), 2600);
-    };
-    
-    // 3. ระบบเมนูด้านข้าง (คลิกแล้วเปลี่ยนสี)
-    document.querySelectorAll('.nav-item').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelector('.nav-item.active')?.classList.remove('active');
-        btn.classList.add('active');
-        toast('เปิดเมนู ' + btn.textContent.trim());
+    // ข้อมูลเมนูเริ่มต้น
+    const defaultNavItems = [
+      { id: 1, cat: 'Overview', ic: '▦', n: 'แดชบอร์ด' },
+      { id: 2, cat: 'Overview', ic: '✦', n: 'ผู้ช่วย AI' },
+      { id: 3, cat: 'Procurement', ic: '◫', n: 'คำขอจัดซื้อ' },
+      { id: 4, cat: 'Procurement', ic: '▤', n: 'ใบสั่งซื้อ' },
+      { id: 5, cat: 'Procurement', ic: '♙', n: 'ผู้จำหน่าย' },
+      { id: 6, cat: 'Procurement', ic: '✓', n: 'รับสินค้า' },
+      { id: 7, cat: 'Workspace', ic: '▱', n: 'คลังเอกสาร' },
+      { id: 8, cat: 'Workspace', ic: '◷', n: 'ประวัติการทำงาน' }
+    ];
+
+    let navItems = JSON.parse(localStorage.getItem('smartCoffeeNav')) || defaultNavItems;
+    let activeMenuId = 1; // ให้แดชบอร์ด Active เป็นค่าเริ่มต้น
+
+    // ฟังก์ชันวาดเมนู
+    function renderSidebar() {
+      const nav = document.getElementById('dynamicNav');
+      let html = '';
+      
+      const categories = [...new Set(navItems.map(i => i.cat))]; // ดึงหมวดหมู่ที่ไม่ซ้ำกัน
+      
+      categories.forEach(c => {
+        const itemsInCategory = navItems.filter(i => i.cat === c);
+        if(itemsInCategory.length > 0) {
+            html += `<div class="nav-title">${c}</div>`;
+            itemsInCategory.forEach(item => {
+              const isActive = item.id === activeMenuId ? 'active' : '';
+              html += `
+                <div class="nav-item-wrapper">
+                  <button class="nav-item ${isActive}" onclick="setActiveMenu(${item.id}, '${item.n}')">
+                    <span class="ico">${item.ic}</span>${item.n}
+                  </button>
+                  <button class="del-menu" onclick="deleteMenu(${item.id})" title="ลบเมนูนี้">✖</button>
+                </div>
+              `;
+            });
+        }
       });
-    });
-    
-    // 4. เลื่อนจอไปที่แชทเมื่อกด "เริ่มถามผู้ช่วย AI"
-    document.getElementById('askAi').onclick = () => {
-      document.getElementById('chat').scrollIntoView({behavior:'smooth',block:'center'});
-      document.getElementById('question').focus();
+      nav.innerHTML = html;
+    }
+
+    // ฟังก์ชันเลือกเมนู
+    window.setActiveMenu = function(id, name) {
+      activeMenuId = id;
+      renderSidebar(); // วาดใหม่เพื่ออัปเดตแถบสี
+      toast('เปิดเมนู ' + name);
     };
 
-    // --- ระบบตาราง: เพิ่ม เลบ และแสดงผลด้วย LocalStorage ---
+    // ฟังก์ชันลบเมนู
+    window.deleteMenu = function(id) {
+      if(confirm('ต้องการลบเมนูนี้ออกใช่หรือไม่?')) {
+        navItems = navItems.filter(item => item.id !== id);
+        localStorage.setItem('smartCoffeeNav', JSON.stringify(navItems));
+        renderSidebar();
+      }
+    };
+
+    // เปิด/ปิด โหมดแก้ไขเมนู
+    document.getElementById('toggleEditModeBtn').addEventListener('click', () => {
+      document.getElementById('dynamicNav').classList.toggle('editing');
+      document.getElementById('newMenuForm').classList.toggle('active');
+    });
+
+    // เพิ่มเมนูใหม่
+    document.getElementById('newMenuForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const newItem = {
+        id: Date.now(),
+        ic: document.getElementById('newMenuIcon').value.trim(),
+        n: document.getElementById('newMenuName').value.trim(),
+        cat: document.getElementById('newMenuCategory').value
+      };
+      navItems.push(newItem);
+      localStorage.setItem('smartCoffeeNav', JSON.stringify(navItems));
+      renderSidebar();
+      document.getElementById('newMenuForm').reset();
+      toast('เพิ่มเมนูใหม่สำเร็จ!');
+    });
+
+
+    // ==========================================
+    // 🟢 ระบบจัดการตารางคำสั่งซื้อ (Table JS)
+    // ==========================================
     
-    // ข้อมูลเริ่มต้นสำหรับแสดงครั้งแรก
     const defaultOrders = [
       { id: 1, po: "PO-2607-024", supplier: "เชียงใหม่ อาราบิก้า", item: "เมล็ดคั่วกลาง 120 กก.", status: "pending", statusText: "รอส่งสินค้า" },
       { id: 2, po: "PO-2607-023", supplier: "Doi Chang Coffee", item: "เมล็ดพิเศษ 150 กก.", status: "approved", statusText: "อนุมัติแล้ว" },
       { id: 3, po: "PO-2607-021", supplier: "Hillkoff", item: "เมล็ดคั่วเข้ม 80 กก.", status: "review", statusText: "ตรวจรับสินค้า" }
     ];
 
-    // โหลดข้อมูลจาก LocalStorage ถ้าไม่มีให้ใช้ข้อมูลเริ่มต้น
     let orders = JSON.parse(localStorage.getItem('coffeeOrders')) || defaultOrders;
 
-    // ฟังก์ชันวาดตาราง
     function renderTable() {
       const tbody = document.getElementById('orderTableBody');
       tbody.innerHTML = '';
-      
       if(orders.length === 0) {
         tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding: 20px; color: var(--muted);">ไม่มีข้อมูลคำสั่งซื้อ</td></tr>`;
         return;
       }
-
       orders.forEach(order => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
@@ -208,7 +270,6 @@
       });
     }
 
-    // ฟังก์ชันลบข้อมูล
     window.deleteOrder = function(id) {
       if(confirm('คุณต้องการลบรายการคำสั่งซื้อนี้ใช่หรือไม่?')) {
         orders = orders.filter(o => o.id !== id);
@@ -218,57 +279,43 @@
       }
     };
 
-    // จัดการปุ่มเปิด-ปิด ฟอร์มเพิ่มข้อมูล
-    document.getElementById('toggleFormBtn').addEventListener('click', () => {
-      const form = document.getElementById('addOrderForm');
-      form.classList.toggle('active');
-    });
+    document.getElementById('toggleFormBtn').addEventListener('click', () => document.getElementById('addOrderForm').classList.toggle('active'));
 
-    // ฟังก์ชันเพิ่มข้อมูลใหม่เมื่อกด Submit ฟอร์ม
     document.getElementById('addOrderForm').addEventListener('submit', e => {
       e.preventDefault();
-      const newOrder = {
-        id: Date.now(), // ใช้ timestamp เป็น ID เพื่อไม่ให้ซ้ำกัน
+      orders.unshift({
+        id: Date.now(),
         po: document.getElementById('inputPo').value.trim(),
         supplier: document.getElementById('inputSupplier').value.trim(),
         item: document.getElementById('inputItem').value.trim(),
-        status: "pending",
-        statusText: "รอส่งสินค้า"
-      };
-      
-      orders.unshift(newOrder); // เพิ่มข้อมูลใหม่ไปไว้ด้านบนสุด
-      localStorage.setItem('coffeeOrders', JSON.stringify(orders)); // บันทึกลงเครื่อง
-      
-      renderTable(); // วาดตารางใหม่
-      document.getElementById('addOrderForm').reset(); // ล้างช่องกรอกข้อมูล
-      document.getElementById('addOrderForm').classList.remove('active'); // ซ่อนฟอร์ม
+        status: "pending", statusText: "รอส่งสินค้า"
+      });
+      localStorage.setItem('coffeeOrders', JSON.stringify(orders));
+      renderTable();
+      document.getElementById('addOrderForm').reset();
+      document.getElementById('addOrderForm').classList.remove('active');
       toast('✅ เพิ่มคำสั่งซื้อใหม่เรียบร้อยแล้ว');
     });
 
-    // --- ระบบแชท AI ---
+    // แชทจำลอง
     document.getElementById('chatForm').addEventListener('submit', e => {
       e.preventDefault();
       const input = document.getElementById('question');
       const q = input.value.trim();
       if(!q) return;
-      
       const messages = document.getElementById('messages');
       messages.insertAdjacentHTML('beforeend', `<div class="message user">${q}</div>`);
       input.value = '';
       messages.scrollTop = messages.scrollHeight;
-      
-      // จำลอง AI ตอบกลับ
       setTimeout(() => {
-        messages.insertAdjacentHTML('beforeend', '<div class="message bot">ได้รับคำถามแล้วค่ะ ระบบ AI จะค้นหาข้อมูลจากใบสั่งซื้อและเอกสารผู้จำหน่าย เพื่อสรุปข้อมูลให้คุณนะคะ<div class="source">RAG • คลังเอกสารจัดซื้อ</div></div>');
+        messages.insertAdjacentHTML('beforeend', '<div class="message bot">ได้รับคำถามแล้วค่ะ ระบบจะค้นหาและสรุปข้อมูลให้คุณนะคะ<div class="source">RAG • คลังเอกสารจัดซื้อ</div></div>');
         messages.scrollTop = messages.scrollHeight;
       }, 600);
     });
 
-    // เริ่มต้นการทำงานเมื่อโหลดหน้าเว็บ
+    // เริ่มทำงานเมื่อเปิดเว็บ
+    renderSidebar();
     renderTable();
-    
-    // ฟังก์ชันโหลดไฟล์ (เผื่อต้องการบันทึกเป็น HTML ออกมาอีก)
-    document.getElementById('saveHtml').onclick=()=>{const html='<!doctype html>\n'+document.documentElement.outerHTML;const file=new Blob([html],{type:'text/html;charset=utf-8'});const url=URL.createObjectURL(file);const a=document.createElement('a');a.href=url;a.download='smart-coffee-ai-assistant.html';a.click();URL.revokeObjectURL(url);toast('กำลังบันทึกไฟล์ HTML')};
   </script>
 </body>
 </html>
