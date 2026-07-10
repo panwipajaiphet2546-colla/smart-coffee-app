@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Smart Coffee AI Assistant</title>
   <style>
+    /* CSS เดิมทั้งหมดของคุณ */
     :root { --ink:#28201c; --muted:#7b706a; --cream:#f8f4ed; --paper:#fffdf9; --line:#eadfd3; --coffee:#643b29; --orange:#d87436; --sage:#4f7665; --shadow:0 16px 40px rgba(73,44,29,.09); }
     * { box-sizing:border-box; } body { margin:0; font-family:system-ui,-apple-system,"Segoe UI",sans-serif; color:var(--ink); background:var(--cream); }
     .app { min-height:100vh; display:grid; grid-template-columns:248px 1fr; }
@@ -29,7 +30,11 @@
     .chat { display:flex; flex-direction:column; min-height:349px; } .messages { flex:1; padding:15px 0 5px; display:grid; gap:12px; } .message { max-width:88%; padding:10px 12px; border-radius:10px; line-height:1.5; font-size:13px; } .bot { background:#f5eee7; border-top-left-radius:2px; } .user { margin-left:auto; background:#6c4130; color:white; border-top-right-radius:2px; } .source { color:#a05b34; font-size:11px; margin-top:5px; font-weight:650; }
     .chat-form { display:flex; border-top:1px solid var(--line); padding-top:15px; gap:8px; } input { min-width:0; flex:1; padding:10px 12px; border:1px solid #d9cbbf; border-radius:8px; outline-color:#b86b40; font:inherit; font-size:12px; } .send { background:var(--orange); color:white; border:0; border-radius:8px; padding:0 14px; cursor:pointer; font-weight:700; }
     .toast { position:fixed; right:24px; bottom:24px; background:#253c32; color:white; padding:12px 16px; border-radius:9px; box-shadow:var(--shadow); transform:translateY(100px); transition:.25s; font-size:13px; } .toast.show { transform:translateY(0); }
-    @media(max-width:900px){ .app{grid-template-columns:1fr} aside{display:none} main{padding:22px 17px}.top,.grid{grid-template-columns:1fr}.metrics{grid-template-columns:repeat(2,1fr)}header .date{display:none} }
+    
+    /* CSS เพิ่มเติมสำหรับฟอร์มกรอกข้อมูล */
+    .add-form { display: none; grid-template-columns: 1fr 1fr 1fr auto; gap: 10px; background: #f5eee7; padding: 15px; border-radius: 8px; margin-bottom: 15px; }
+    .add-form.active { display: grid; }
+    @media(max-width:900px){ .app{grid-template-columns:1fr} aside{display:none} main{padding:22px 17px}.top,.grid{grid-template-columns:1fr}.metrics{grid-template-columns:repeat(2,1fr)}header .date{display:none} .add-form { grid-template-columns: 1fr; } }
     @media(max-width:520px){.steps{gap:7px}.step{font-size:9px}.metric{padding:14px}.hero h2{font-size:22px}table{font-size:11px}th,td{padding:9px 4px}}
   </style>
 </head>
@@ -52,19 +57,116 @@
       </div>
       <section class="metrics"><div class="card metric"><label>คำขอรออนุมัติ</label><strong>08</strong><span class="trend">↓ 2 จากสัปดาห์ก่อน</span></div><div class="card metric"><label>ใบสั่งซื้อที่เปิดอยู่</label><strong>14</strong><span class="trend">↑ 4 รายการ</span></div><div class="card metric"><label>มูลค่าจัดซื้อเดือนนี้</label><strong>฿482K</strong><span class="trend">↑ 12.5%</span></div><div class="card metric"><label>คะแนนผู้จำหน่ายเฉลี่ย</label><strong>4.6</strong><span class="trend">/ 5.0</span></div></section>
       <div class="grid">
-        <section class="card section"><div class="section-head"><h3>คำสั่งซื้อล่าสุด</h3><button class="link">ดูทั้งหมด</button></div><table><thead><tr><th>เลขที่</th><th>ผู้จำหน่าย</th><th>รายการ</th><th>สถานะ</th></tr></thead><tbody><tr><td>PO-2607-024</td><td class="supplier">เชียงใหม่ อาราบิก้า<span class="sub">฿84,000</span></td><td>เมล็ดคั่วกลาง 120 กก.</td><td><span class="pill pending">รอส่งสินค้า</span></td></tr><tr><td>PO-2607-023</td><td class="supplier">Doi Chang Coffee<span class="sub">฿126,500</span></td><td>เมล็ดพิเศษ 150 กก.</td><td><span class="pill approved">อนุมัติแล้ว</span></td></tr><tr><td>PO-2607-021</td><td class="supplier">Hillkoff<span class="sub">฿58,200</span></td><td>เมล็ดคั่วเข้ม 80 กก.</td><td><span class="pill review">ตรวจรับสินค้า</span></td></tr></tbody></table></section>
+        <section class="card section">
+          <div class="section-head">
+            <h3>คำสั่งซื้อล่าสุด</h3>
+            <!-- เพิ่มปุ่มสำหรับเปิดฟอร์มเพิ่มข้อมูล -->
+            <div>
+              <button class="link" id="toggleFormBtn" style="margin-right: 10px;">+ เพิ่มคำสั่งซื้อ</button>
+              <button class="link">ดูทั้งหมด</button>
+            </div>
+          </div>
+          
+          <!-- ฟอร์มสำหรับกรอกข้อมูลใหม่ -->
+          <form class="add-form" id="addOrderForm">
+            <input id="inputPo" placeholder="เลขที่ (เช่น PO-2607-025)" required>
+            <input id="inputSupplier" placeholder="ชื่อผู้จำหน่าย" required>
+            <input id="inputItem" placeholder="รายการสินค้า" required>
+            <button type="submit" class="send">บันทึกข้อมูล</button>
+          </form>
+
+          <table>
+            <thead><tr><th>เลขที่</th><th>ผู้จำหน่าย</th><th>รายการ</th><th>สถานะ</th><th>ลบ</th></tr></thead>
+            <!-- เปลี่ยนเป็นดึงข้อมูลจาก JS -->
+            <tbody id="orderTableBody">
+              <!-- ข้อมูลจะถูกแทรกตรงนี้ -->
+            </tbody>
+          </table>
+        </section>
+
         <section class="card section chat" id="chat"><div class="section-head"><h3>✦ ผู้ช่วยจัดซื้อ AI</h3><span class="pill approved">ออนไลน์</span></div><div class="messages" id="messages"><div class="message bot">สวัสดีค่ะ มีอะไรให้ช่วยเกี่ยวกับการจัดซื้อเมล็ดกาแฟวันนี้ไหมคะ?<div class="source">อ้างอิงจากคลังเอกสารของคุณ</div></div><div class="message user">ช่วยสรุปผู้จำหน่ายที่มีคะแนนสูงสุด</div><div class="message bot">จากการประเมิน 3 เดือนล่าสุด <b>เชียงใหม่ อาราบิก้า</b> ได้คะแนนสูงสุด 4.8/5 โดยเด่นด้านคุณภาพเมล็ดและความตรงต่อเวลา<div class="source">เอกสาร: Supplier Evaluation Q2/2026</div></div></div><form class="chat-form" id="chatForm"><input id="question" placeholder="พิมพ์คำถามเกี่ยวกับงานจัดซื้อ..." autocomplete="off" /><button class="send">ส่ง</button></form></section>
       </div>
     </main>
   </div><div class="toast" id="toast"></div>
+
   <script>
+    // การจัดการวันที่และ UI พื้นฐาน
     const thaiDate = new Intl.DateTimeFormat('th-TH',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(new Date());
     document.getElementById('today').textContent=thaiDate;
     const toast=t=>{const e=document.getElementById('toast');e.textContent=t;e.classList.add('show');setTimeout(()=>e.classList.remove('show'),2600)};
+    
     document.querySelectorAll('.nav-item').forEach(b=>b.addEventListener('click',()=>{document.querySelector('.nav-item.active').classList.remove('active');b.classList.add('active');toast('เปิดเมนู '+b.textContent.trim())}));
     document.getElementById('askAi').onclick=()=>{document.getElementById('chat').scrollIntoView({behavior:'smooth',block:'center'});document.getElementById('question').focus()};
-    document.getElementById('saveHtml').onclick=()=>{const html='<!doctype html>\n'+document.documentElement.outerHTML;const file=new Blob([html],{type:'text/html;charset=utf-8'});const url=URL.createObjectURL(file);const a=document.createElement('a');a.href=url;a.download='smart-coffee-ai-assistant.html';a.click();URL.revokeObjectURL(url);toast('กำลังบันทึกไฟล์ HTML')};
+    
     document.getElementById('chatForm').addEventListener('submit',e=>{e.preventDefault();const input=document.getElementById('question'), q=input.value.trim();if(!q)return;const messages=document.getElementById('messages');messages.insertAdjacentHTML('beforeend',`<div class="message user"></div>`);messages.lastElementChild.textContent=q;input.value='';setTimeout(()=>{messages.insertAdjacentHTML('beforeend','<div class="message bot">ได้รับคำถามแล้วค่ะ ระบบ AI จะค้นหาข้อมูลจากใบสั่งซื้อ เอกสาร และการประเมินผู้จำหน่าย เพื่อจัดทำคำตอบพร้อมแหล่งอ้างอิงให้คุณ<div class="source">RAG • คลังเอกสารจัดซื้อ</div></div>');messages.scrollTop=messages.scrollHeight},450)});
+
+    // --- ระบบเพิ่ม/ลบ ข้อมูลด้วย LocalStorage ---
+    
+    // 1. ข้อมูลตั้งต้น (ถ้าไม่มีในเครื่อง จะใช้ข้อมูลชุดนี้)
+    const defaultOrders = [
+      { id: Date.now()+1, po: "PO-2607-024", supplier: "เชียงใหม่ อาราบิก้า", item: "เมล็ดคั่วกลาง 120 กก.", status: "pending", statusText: "รอส่งสินค้า" },
+      { id: Date.now()+2, po: "PO-2607-023", supplier: "Doi Chang Coffee", item: "เมล็ดพิเศษ 150 กก.", status: "approved", statusText: "อนุมัติแล้ว" },
+      { id: Date.now()+3, po: "PO-2607-021", supplier: "Hillkoff", item: "เมล็ดคั่วเข้ม 80 กก.", status: "review", statusText: "ตรวจรับสินค้า" }
+    ];
+
+    // 2. โหลดข้อมูลจาก LocalStorage
+    let orders = JSON.parse(localStorage.getItem('coffeeOrders')) || defaultOrders;
+
+    // 3. ฟังก์ชันอัปเดตตาราง
+    function renderTable() {
+      const tbody = document.getElementById('orderTableBody');
+      tbody.innerHTML = '';
+      orders.forEach(order => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${order.po}</td>
+          <td class="supplier">${order.supplier}</td>
+          <td>${order.item}</td>
+          <td><span class="pill ${order.status}">${order.statusText}</span></td>
+          <td><button class="link" onclick="deleteOrder(${order.id})" style="color:#d87436;">✖</button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // 4. ฟังก์ชันเพิ่มข้อมูล
+    document.getElementById('addOrderForm').addEventListener('submit', e => {
+      e.preventDefault();
+      const newOrder = {
+        id: Date.now(),
+        po: document.getElementById('inputPo').value,
+        supplier: document.getElementById('inputSupplier').value,
+        item: document.getElementById('inputItem').value,
+        status: "pending",
+        statusText: "รอดำเนินการ" // ค่าเริ่มต้นเมื่อสร้างใหม่
+      };
+      
+      orders.unshift(newOrder); // นำข้อมูลใหม่แทรกไว้บนสุดของตาราง
+      localStorage.setItem('coffeeOrders', JSON.stringify(orders)); // บันทึกลงเครื่อง
+      
+      renderTable(); // วาดตารางใหม่
+      document.getElementById('addOrderForm').reset(); // ล้างช่องกรอก
+      toast('เพิ่มคำสั่งซื้อใหม่แล้ว');
+    });
+
+    // 5. ฟังก์ชันลบข้อมูล
+    window.deleteOrder = function(id) {
+      if(confirm('ต้องการลบรายการนี้ใช่หรือไม่?')) {
+        orders = orders.filter(o => o.id !== id);
+        localStorage.setItem('coffeeOrders', JSON.stringify(orders));
+        renderTable();
+        toast('ลบรายการสำเร็จ');
+      }
+    };
+
+    // เปิด/ปิด ฟอร์มกรอกข้อมูล
+    document.getElementById('toggleFormBtn').addEventListener('click', () => {
+      document.getElementById('addOrderForm').classList.toggle('active');
+    });
+
+    // เรียกทำงานครั้งแรกเมื่อเปิดเว็บ
+    renderTable();
+
   </script>
 </body>
 </html>
