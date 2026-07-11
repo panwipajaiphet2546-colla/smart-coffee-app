@@ -1,239 +1,529 @@
-import React from 'react';
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart Coffee AI Assistant</title>
+  <style>
+    /* 🎨 ตั้งค่าตัวแปรสีและโครงสร้างหลัก */
+    :root { --ink:#28201c; --muted:#7b706a; --cream:#f8f4ed; --paper:#fffdf9; --line:#eadfd3; --coffee:#643b29; --orange:#d87436; --sage:#4f7665; --shadow:0 16px 40px rgba(73,44,29,.09); }
+    * { box-sizing:border-box; } body { margin:0; font-family:system-ui,-apple-system,"Segoe UI",sans-serif; color:var(--ink); background:var(--cream); }
+    
+    /* 🔐 สไตล์สำหรับหน้า Login */
+    #login-page { position: fixed; inset: 0; background: var(--cream); display: flex; align-items: center; justify-content: center; z-index: 1000; }
+    .login-box { background: var(--paper); padding: 40px; border-radius: 16px; box-shadow: var(--shadow); width: 100%; max-width: 380px; text-align: center; border: 1px solid var(--line); }
+    .login-box h2 { margin: 0 0 5px; font-size: 24px; color: var(--coffee); }
+    .login-box p { color: var(--muted); font-size: 14px; margin-bottom: 25px; }
+    .login-form { display: flex; flex-direction: column; gap: 15px; }
+    .login-form input { padding: 12px; border: 1px solid var(--line); border-radius: 8px; font-size: 14px; outline-color: var(--orange); }
+    .login-form button { background: var(--orange); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.2s; font-size: 15px; }
+    .login-form button:hover { background: #b85f29; }
+    .error-msg { color: #d87436; font-size: 12px; display: none; margin-top: -5px; }
 
-const DashboardMockup = () => {
-  return (
-    <div className="flex h-screen bg-[#FDFBF7] font-sans text-gray-800 overflow-hidden">
-      
-      {/* Sidebar */}
-      <aside className="w-64 bg-[#3E2723] text-white flex flex-col justify-between">
-        <div>
-          <div className="p-6 flex items-center gap-3">
-            <div className="w-8 h-8 bg-orange-700 rounded-full flex items-center justify-center font-bold">
-              SC
-            </div>
-            <h1 className="text-lg font-bold leading-tight">
-              Smart Coffee <br/><span className="text-xs text-gray-400 font-normal">AI PROCUREMENT</span>
-            </h1>
-          </div>
-          
-          <nav className="mt-6 flex flex-col gap-1 px-4">
-            <p className="text-xs text-gray-400 mb-2 px-2">OVERVIEW</p>
-            <a href="#" className="bg-[#5D4037] text-white px-4 py-2 rounded-md flex items-center gap-3 font-medium shadow-sm">
-              <span className="w-4 h-4 bg-white/20 rounded"></span> แดชบอร์ด
-            </a>
-            
-            <p className="text-xs text-gray-400 mt-6 mb-2 px-2">PROCUREMENT</p>
-            <a href="#" className="text-gray-300 hover:bg-[#4E342E] px-4 py-2 rounded-md flex items-center gap-3 transition">
-              <span className="w-4 h-4 bg-white/10 rounded"></span> คำขอจัดซื้อ
-            </a>
-            <a href="#" className="text-gray-300 hover:bg-[#4E342E] px-4 py-2 rounded-md flex items-center gap-3 transition">
-              <span className="w-4 h-4 bg-white/10 rounded"></span> ใบสั่งซื้อ
-            </a>
-            <a href="#" className="text-gray-300 hover:bg-[#4E342E] px-4 py-2 rounded-md flex items-center gap-3 transition">
-              <span className="w-4 h-4 bg-white/10 rounded"></span> ผู้จำหน่าย
-            </a>
+    /* 📌 โครงสร้างแอปหลัก */
+    .app { min-height:100vh; display:none; grid-template-columns:248px 1fr; }
+    
+    /* เมนูด้านข้าง (Sidebar) */
+    aside { background:#30231e; color:#f8eee5; padding:28px 16px; display:flex; flex-direction:column; gap:26px; overflow-y:auto; }
+    .brand { display:flex; gap:11px; align-items:center; padding:0 10px; font-weight:750; line-height:1.1; }
+    .bean { width:35px; height:35px; border-radius:50% 48% 52% 48%; background:#df7d40; position:relative; transform:rotate(-25deg); } .bean:after { content:""; position:absolute; inset:4px 15px 4px 15px; border-left:2px solid #6a3825; border-radius:50%; }
+    .brand small { display:block; color:#bcaea6; font-size:11px; font-weight:500; margin-top:4px; letter-spacing:.04em; }
+    nav { display:grid; gap:5px; } .nav-title { color:#a79890; text-transform:uppercase; font-size:10px; letter-spacing:.12em; margin:8px 11px; }
+    .nav-item-wrapper { display: flex; align-items: center; justify-content: space-between; gap: 5px; }
+    .nav-item { width: 100%; color:#d6c8c0; border:0; background:transparent; text-align:left; border-radius:9px; padding:11px; cursor:pointer; font-size:14px; display:flex; align-items:center; gap:11px; transition: 0.2s; }
+    .nav-item:hover,.nav-item.active { background:#503a30; color:white; } .nav-item.active { box-shadow:inset 3px 0 #e28242; } .ico { width:18px; text-align:center; }
+    .del-menu { background:none; border:none; color:#ff6b6b; cursor:pointer; font-size:14px; display:none; padding: 5px; } 
+    .editing .del-menu { display:block; } .editing .nav-item { width: 85%; }
+    
+    .menu-edit-form { display:none; flex-direction:column; gap:8px; margin-top:10px; padding:15px; background:#3f2e26; border-radius:8px; border:1px solid #594137; } .menu-edit-form.active { display:flex; }
+    .menu-edit-form input, .menu-edit-form select { padding:8px; border-radius:6px; border:1px solid #594137; background:#281d19; color:white; font-size:12px; outline:none; }
+    .menu-edit-form button { background:var(--orange); color:white; border:none; padding:8px; border-radius:6px; cursor:pointer; font-weight:bold; font-size:12px; }
+    .btn-toggle-edit { background:none; border:1px dashed #594137; color:#bcaea6; padding:8px; border-radius:8px; cursor:pointer; font-size:12px; transition:0.2s; margin-top:10px; width: 100%; } .btn-toggle-edit:hover { background:#3f2e26; color:white; }
 
-            <p className="text-xs text-gray-400 mt-6 mb-2 px-2">WORKSPACE</p>
-            <a href="#" className="text-gray-300 hover:bg-[#4E342E] px-4 py-2 rounded-md flex items-center gap-3 transition">
-              <span className="w-4 h-4 bg-white/10 rounded"></span> คลังเอกสาร
-            </a>
-          </nav>
-        </div>
+    .profile { margin-top:auto; border-top:1px solid #594137; padding:19px 10px 0; display:flex; gap:10px; align-items:center; font-size:13px; } .avatar { width:31px; height:31px; border-radius:50%; display:grid; place-items:center; background:#8eaa95; color:#163328; font-weight:800; }
+    .btn-logout { background: #1f1511; color: #ff6b6b; border: 1px solid #4a332a; border-radius: 8px; padding: 10px; cursor: pointer; font-size: 12px; font-weight: bold; margin-top: 15px; transition: 0.2s; } .btn-logout:hover { background: #ff6b6b; color: white; }
 
-        {/* User Profile */}
-        <div className="p-4 border-t border-white/10">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-green-800 rounded-full flex items-center justify-center text-sm font-bold">
-              PK
-            </div>
-            <div>
-              <p className="text-sm font-semibold">พรรณนิภา กาแฟดี</p>
-              <p className="text-xs text-gray-400">Procurement Manager</p>
-            </div>
-          </div>
-        </div>
-      </aside>
+    /* 📄 ส่วนเนื้อหาหลัก */
+    main { padding:29px 36px 36px; max-width:1500px; width:100%; margin:auto; } 
+    header { display:flex; justify-content:space-between; align-items:center; margin-bottom:27px; border-bottom: 1px solid var(--line); padding-bottom: 20px; }
+    h1 { font-size:27px; margin:0; letter-spacing:-.04em; } header p { margin:5px 0 0; color:var(--muted); font-size:14px; } .date { color:var(--muted); font-size:13px; }
+    
+    .content-view { display: none; animation: fadeIn 0.3s ease; } .content-view.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-      {/* Main Content */}
-      <main className="flex-1 p-8 overflow-y-auto">
-        {/* Header */}
-        <header className="flex justify-between items-end mb-8">
-          <div>
-            <h2 className="text-2xl font-bold text-gray-900">แดชบอร์ด</h2>
-            <p className="text-sm text-gray-500 mt-1">ภาพรวมงานจัดซื้อเมล็ดกาแฟของคุณ</p>
-          </div>
-          <div className="text-sm text-gray-500 font-medium">
-            วันเสาร์ที่ 11 กรกฎาคม 2569
-          </div>
-        </header>
-
-        {/* Top Section: Banner & Progress */}
-        <div className="grid grid-cols-3 gap-6 mb-6">
-          
-          {/* Banner */}
-          <div className="col-span-2 bg-gradient-to-r from-[#8C5A3C] to-[#A06C4B] rounded-2xl p-8 text-white shadow-md relative overflow-hidden">
-            <div className="relative z-10">
-              <p className="text-xs font-semibold tracking-wider text-orange-200 mb-2">AI PROCUREMENT INSIGHT</p>
-              <h3 className="text-2xl font-bold mb-4 w-3/4 leading-snug">
-                ตัดสินใจจัดซื้ออย่างมั่นใจ ด้วยข้อมูลที่ครบถ้วน
-              </h3>
-              <p className="text-sm text-white/80 mb-6 w-4/5">
-                ให้ AI ช่วยเปรียบเทียบผู้จำหน่าย ค้นหานโยบาย และสรุปเอกสารจัดซื้อของคุณได้ทันที
-              </p>
-              <button className="bg-white text-[#8C5A3C] px-5 py-2.5 rounded-lg text-sm font-bold shadow-sm hover:bg-gray-50 transition">
-                เริ่มถามผู้ช่วย AI &rarr;
-              </button>
-            </div>
-            {/* Background Decorative Circles */}
-            <div className="absolute -bottom-10 -right-10 w-64 h-64 bg-white/10 rounded-full"></div>
-            <div className="absolute top-10 -right-20 w-40 h-40 bg-white/5 rounded-full"></div>
-          </div>
-
-          {/* Status Tracker */}
-          <div className="col-span-1 bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex flex-col justify-center">
-            <div className="flex justify-between items-center mb-6">
-              <h4 className="font-bold text-gray-800">สถานะกระบวนการจัดซื้อ</h4>
-              <span className="text-xs text-gray-400">ล่าสุด PR-2026-071</span>
-            </div>
-            <div className="relative flex justify-between items-center w-full px-2">
-              {/* Lines connecting steps */}
-              <div className="absolute top-4 left-6 right-6 h-0.5 bg-gray-200 -z-10"></div>
-              <div className="absolute top-4 left-6 w-1/3 h-0.5 bg-[#4CAF50] -z-10"></div> {/* Green Progress Line */}
-              
-              {/* Step 1 */}
-              <div className="flex flex-col items-center">
-                <div className="w-8 h-8 rounded-full bg-[#4CAF50] text-white flex items-center justify-center shadow-sm">✓</div>
-                <p className="text-xs font-bold mt-2 text-gray-800">คำขอซื้อ</p>
-                <p className="text-[10px] text-gray-400">เสร็จสิ้น</p>
-              </div>
-              {/* Step 2 */}
-              <div className="flex flex-col items-center">
-                <div className="w-8 h-8 rounded-full bg-[#4CAF50] text-white flex items-center justify-center shadow-sm">✓</div>
-                <p className="text-xs font-bold mt-2 text-gray-800">อนุมัติ</p>
-                <p className="text-[10px] text-gray-400">เสร็จสิ้น</p>
-              </div>
-              {/* Step 3 */}
-              <div className="flex flex-col items-center">
-                <div className="w-8 h-8 rounded-full bg-[#E65100] text-white flex items-center justify-center font-bold shadow-sm ring-4 ring-orange-50">3</div>
-                <p className="text-xs font-bold mt-2 text-[#E65100]">สั่งซื้อ</p>
-                <p className="text-[10px] text-gray-400">กำลังดำเนินการ</p>
-              </div>
-              {/* Step 4 */}
-              <div className="flex flex-col items-center">
-                <div className="w-8 h-8 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center font-bold shadow-inner">4</div>
-                <p className="text-xs font-medium mt-2 text-gray-500">รับสินค้า</p>
-                <p className="text-[10px] text-gray-400">รอส่งมอบ</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* 4 Summary Cards */}
-        <div className="grid grid-cols-4 gap-6 mb-6">
-          <div className="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex flex-col justify-between">
-            <p className="text-sm text-gray-500 font-medium mb-2">คำขอรออนุมัติ</p>
-            <div className="flex items-end gap-2">
-              <span className="text-3xl font-bold text-gray-900">08</span>
-              <span className="text-xs text-red-500 font-medium mb-1 flex items-center">↓ 2 จากสัปดาห์ก่อน</span>
-            </div>
-          </div>
-          <div className="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex flex-col justify-between">
-            <p className="text-sm text-gray-500 font-medium mb-2">ใบสั่งซื้อที่เปิดอยู่</p>
-            <div className="flex items-end gap-2">
-              <span className="text-3xl font-bold text-gray-900">2</span>
-              <span className="text-xs text-gray-400 mb-1">อัปเดตล่าสุด</span>
-            </div>
-          </div>
-          <div className="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex flex-col justify-between">
-            <p className="text-sm text-gray-500 font-medium mb-2">มูลค่าจัดซื้อเดือนนี้</p>
-            <div className="flex items-end gap-2">
-              <span className="text-3xl font-bold text-gray-900">฿482K</span>
-              <span className="text-xs text-green-600 font-medium mb-1 flex items-center">↑ 12.5%</span>
-            </div>
-          </div>
-          <div className="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex flex-col justify-between">
-            <p className="text-sm text-gray-500 font-medium mb-2">คะแนนผู้จำหน่ายเฉลี่ย</p>
-            <div className="flex items-end gap-2">
-              <span className="text-3xl font-bold text-gray-900">4.6</span>
-              <span className="text-xs text-gray-400 mb-1">/ 5.0</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Bottom Section: Table & Chat */}
-        <div className="grid grid-cols-2 gap-6">
-          
-          {/* Recent PO Table */}
-          <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-            <div className="flex justify-between items-center mb-6">
-              <h3 className="font-bold text-gray-800">คำสั่งซื้อล่าสุด (PO)</h3>
-              <a href="#" className="text-sm text-gray-500 hover:text-orange-600">ดูทั้งหมด &rarr;</a>
-            </div>
-            <table className="w-full text-left border-collapse">
-              <thead>
-                <tr className="text-xs text-gray-400 border-b border-gray-100">
-                  <th className="pb-3 font-medium">เลขที่</th>
-                  <th className="pb-3 font-medium">ผู้จำหน่าย</th>
-                  <th className="pb-3 font-medium">รายการ</th>
-                  <th className="pb-3 font-medium text-center">สถานะ</th>
-                </tr>
-              </thead>
-              <tbody className="text-sm">
-                <tr className="border-b border-gray-50">
-                  <td className="py-4 font-medium text-gray-700">PO-2607-024</td>
-                  <td className="py-4 text-gray-600">เชียงใหม่ อาราบิก้า</td>
-                  <td className="py-4 text-gray-600">เมล็ดคั่วกลาง</td>
-                  <td className="py-4 text-center">
-                    <span className="bg-orange-100 text-orange-700 text-xs px-2 py-1 rounded-full font-medium">รอส่งมอบ</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td className="py-4 font-medium text-gray-700">PO-2607-023</td>
-                  <td className="py-4 text-gray-600">Doi Chang Coffee</td>
-                  <td className="py-4 text-gray-600">เมล็ดคั่วอ่อน</td>
-                  <td className="py-4 text-center">
-                    <span className="bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full font-medium">อนุมัติแล้ว</span>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          {/* AI Assistant Box (Focal Point Enhanced) */}
-          <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-200 flex flex-col relative">
-            <div className="flex justify-between items-center mb-4 border-b border-gray-100 pb-3">
-              <h3 className="font-bold text-gray-800 flex items-center gap-2">
-                <span className="text-xl">✨</span> ผู้ช่วยจัดซื้อ AI 
-              </h3>
-              <span className="bg-blue-50 text-blue-600 border border-blue-100 text-[10px] px-2 py-1 rounded-full font-bold uppercase tracking-wider">
-                AI พร้อมใช้งาน
-              </span>
-            </div>
-            
-            {/* Chat Area */}
-            <div className="flex-1 bg-gray-50/50 rounded-xl p-4 mb-4 flex flex-col justify-end min-h-[160px]">
-              <div className="bg-[#FAF5F0] border border-[#F0E6DD] text-gray-700 text-sm p-4 rounded-2xl rounded-tl-sm max-w-[90%] shadow-sm">
-                สวัสดีค่ะ ฉันคือ AI Assistant ประจำฝ่ายจัดซื้อ วันนี้มีอะไรให้ช่วยค้นหาเกี่ยวกับการจัดซื้อ ผู้จำหน่าย หรือคลังเอกสารไหมคะ?
-              </div>
-            </div>
-
-            {/* Input Area */}
-            <div className="relative flex items-center">
-              <input 
-                type="text" 
-                placeholder="พิมพ์คำถาม... (เช่น สรุปยอด, เมล็ดกาแฟ, ผู้จำหน่าย)" 
-                className="w-full border-2 border-gray-200 rounded-xl py-3 pl-4 pr-12 text-sm focus:outline-none focus:border-orange-500 transition shadow-inner"
-              />
-              <button className="absolute right-2 bg-gradient-to-br from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white w-8 h-8 rounded-lg flex items-center justify-center shadow-md transition transform hover:scale-105 active:scale-95">
-                <span className="transform rotate-45 -mt-1 -ml-1 text-sm">&#10148;</span>
-              </button>
-            </div>
-          </div>
-          
-        </div>
-      </main>
+    /* สไตล์การ์ด ตาราง และแชท */
+    .top { display:grid; grid-template-columns:1.15fr .85fr; gap:20px; } .card { background:var(--paper); border:1px solid var(--line); box-shadow:var(--shadow); border-radius:15px; }
+    .hero { padding:27px 28px; background:linear-gradient(120deg,#68402d,#8a5134); color:#fff9f3; position:relative; overflow:hidden; } .hero:after { content:""; position:absolute; height:290px; width:290px; border:28px solid rgba(255,255,255,.06); border-radius:50%; right:-110px; top:-118px; }
+    .eyebrow { color:#f5bd91; text-transform:uppercase; letter-spacing:.13em; font-size:10px; font-weight:700; } .hero h2 { max-width:420px; font-size:26px; line-height:1.23; letter-spacing:-.035em; margin:11px 0; } .hero p { max-width:480px; color:#ead9ce; line-height:1.6; font-size:14px; }
+    .hero button { border:0; color:#5d3525; background:#fff8f0; padding:10px 15px; border-radius:8px; font-weight:750; cursor:pointer; margin-top:5px; transition: 0.2s; } .hero button:hover { background: white; transform: translateY(-2px); }
+    .workflow { padding:23px; } .card-title { display:flex; justify-content:space-between; align-items:center; font-weight:750; } .card-title span { color:var(--muted); font-size:12px; font-weight:500; } .steps { margin-top:21px; display:grid; grid-template-columns:repeat(4,1fr); position:relative; } .steps:before { content:""; position:absolute; height:2px; left:16px; right:16px; top:16px; background:#e7dbcf; } .step { z-index:1; font-size:11px; color:var(--muted); } .dot { height:33px; width:33px; border-radius:50%; display:grid; place-items:center; color:white; font-size:13px; font-weight:bold; margin-bottom:9px; background:#c8b9ac; } .done .dot { background:var(--sage); } .current .dot { background:var(--orange); box-shadow:0 0 0 5px #fbe4d4; } .step b { display:block; color:var(--ink); font-size:12px; margin-bottom:3px; }
+    .metrics { display:grid; grid-template-columns:repeat(4,1fr); gap:15px; margin:20px 0; } .metric { padding:18px; } .metric label { display:block; color:var(--muted); font-size:12px; margin-bottom:10px; } .metric strong { font-size:24px; letter-spacing:-.04em; } .metric .trend { color:var(--sage); font-size:11px; margin-left:5px; }
+    .grid { display:grid; grid-template-columns:1.12fr .88fr; gap:20px; } .section { padding:23px; } .section h3 { margin:0; font-size:16px; } .section-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; } .link { color:var(--coffee); border:0; background:none; font-size:12px; font-weight:700; cursor:pointer; transition: 0.2s; } .link:hover { color: var(--orange); }
+    table { border-collapse:collapse; width:100%; font-size:13px; } th { text-align:left; color:var(--muted); font-size:11px; font-weight:600; padding:10px 8px; border-bottom:1px solid var(--line); } td { padding:13px 8px; border-bottom:1px solid #f1e9e2; } .supplier { font-weight:700; } .sub { display:block; color:var(--muted); font-size:11px; margin-top:3px; } .pill { border-radius:20px; padding:4px 8px; font-weight:650; font-size:10px; white-space:nowrap; } .pending { color:#9b4f1f; background:#fff0df; } .approved { color:#34705b; background:#e7f3ed; } .review { color:#755c1f; background:#faf3d8; }
+    
+    .add-form { display: none; grid-template-columns: 1fr 1fr 1fr auto; gap: 10px; background: #f5eee7; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid var(--line); } .add-form.active { display: grid; }
+    .add-form input, .add-form select { padding: 8px 12px; border: 1px solid #d9cbbf; border-radius: 6px; font-size: 13px; outline-color: var(--orange); }
+    .btn-delete { color: #d87436; background: none; border: none; cursor: pointer; font-size: 14px; font-weight: bold; } .btn-delete:hover { color: red; }
+    
+    .chat { display:flex; flex-direction:column; min-height:400px; } .messages { flex:1; padding:15px 0 5px; display:grid; gap:12px; overflow-y: auto; max-height: 300px; align-content: start; } .message { max-width:90%; padding:10px 12px; border-radius:10px; line-height:1.5; font-size:13px; word-wrap: break-word; } .bot { background:#f5eee7; border-top-left-radius:2px; } .user { margin-left:auto; background:#6c4130; color:white; border-top-right-radius:2px; } .source { color:#a05b34; font-size:11px; margin-top:5px; font-weight:650; display:flex; align-items:center; gap:8px; flex-wrap:wrap; } .loading-ai { font-style: italic; color: var(--muted); }
+    .chat-form { display:flex; border-top:1px solid var(--line); padding-top:15px; gap:8px; } input { min-width:0; flex:1; padding:10px 12px; border:1px solid #d9cbbf; border-radius:8px; outline-color:#b86b40; font:inherit; font-size:12px; } .send { background:var(--orange); color:white; border:0; border-radius:8px; padding:0 14px; cursor:pointer; font-weight:700; transition: 0.2s; } .send:hover { background: #b85f29; }
+    
+    .toast { position:fixed; right:24px; bottom:24px; background:#253c32; color:white; padding:12px 16px; border-radius:9px; box-shadow:var(--shadow); transform:translateY(100px); transition:.25s; font-size:13px; z-index: 100; } .toast.show { transform:translateY(0); }
+    
+    @media(max-width:900px){ .app{grid-template-columns:1fr} aside{display:none} main{padding:22px 17px}.top,.grid{grid-template-columns:1fr}.metrics{grid-template-columns:repeat(2,1fr)}header .date{display:none} .add-form { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  
+  <!-- ========================================== -->
+  <!-- 🔐 หน้า Login -->
+  <!-- ========================================== -->
+  <div id="login-page">
+    <div class="login-box">
+        <h2>Smart Coffee</h2>
+        <p>ระบบจัดการจัดซื้อเมล็ดกาแฟด้วย AI</p>
+        <form class="login-form" id="loginForm">
+            <input type="text" id="username" placeholder="ชื่อผู้ใช้งาน (ลองพิมพ์: admin)" required autocomplete="off">
+            <input type="password" id="password" placeholder="รหัสผ่าน (ลองพิมพ์: 1234)" required>
+            <span class="error-msg" id="loginError">ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง!</span>
+            <button type="submit">เข้าสู่ระบบ</button>
+        </form>
     </div>
-  );
-};
+  </div>
 
-export default DashboardMockup;
+  <!-- ========================================== -->
+  <!-- โครงสร้างแอปหลัก -->
+  <!-- ========================================== -->
+  <div class="app" id="main-app">
+    
+    <aside>
+      <div class="brand"><i class="bean"></i><div>Smart Coffee<small>AI PROCUREMENT</small></div></div>
+      <nav id="dynamicNav"></nav>
+      
+      <button class="btn-toggle-edit" id="toggleEditModeBtn">⚙️ จัดการเมนู</button>
+      <form class="menu-edit-form" id="newMenuForm">
+        <input type="text" id="newMenuIcon" placeholder="ไอคอน (เช่น 📦)" required>
+        <input type="text" id="newMenuName" placeholder="ชื่อเมนู" required>
+        <select id="newMenuCategory">
+            <option value="Overview">Overview</option>
+            <option value="Procurement">Procurement</option>
+            <option value="Workspace">Workspace</option>
+        </select>
+        <button type="submit">+ บันทึกเมนูใหม่</button>
+      </form>
+
+      <div class="profile">
+        <div class="avatar">PK</div>
+        <div><b>พิชญา กาแฟดี</b><small style="display:block;color:#bcaea6;margin-top:3px">Procurement Manager</small></div>
+      </div>
+      <button class="btn-logout" id="logoutBtn">🚪 ออกจากระบบ</button>
+    </aside>
+
+    <main>
+      <header>
+        <div>
+            <h1 id="pageTitle">แดชบอร์ด</h1>
+            <p id="pageDesc">ภาพรวมงานจัดซื้อเมล็ดกาแฟของคุณ</p>
+        </div>
+        <div class="date" id="today"></div>
+      </header>
+
+      <!-- 1. หน้าแดชบอร์ด -->
+      <div id="page-dashboard" class="content-view active">
+        <div class="top">
+          <section class="card hero"><div class="eyebrow">AI Procurement Insight</div><h2>ตัดสินใจจัดซื้ออย่างมั่นใจ ด้วยข้อมูลที่ครบถ้วน</h2><p>ให้ AI ช่วยเปรียบเทียบผู้จำหน่าย ค้นหานโยบาย และสรุปเอกสารจัดซื้อของคุณได้ทันที</p><button id="askAi">เริ่มถามผู้ช่วย AI →</button></section>
+          <section class="card workflow"><div class="card-title">สถานะกระบวนการจัดซื้อ <span>คำขอ PR-2026-071</span></div><div class="steps"><div class="step done"><div class="dot">✓</div><b>คำขอซื้อ</b>เสร็จสิ้น</div><div class="step done"><div class="dot">✓</div><b>อนุมัติ</b>เสร็จสิ้น</div><div class="step current"><div class="dot">3</div><b>สั่งซื้อ</b>กำลังดำเนินการ</div><div class="step"><div class="dot">4</div><b>รับสินค้า</b>รอดำเนินการ</div></div></section>
+        </div>
+
+        <section class="metrics">
+          <div class="card metric"><label>คำขอรออนุมัติ</label><strong>08</strong><span class="trend">↓ 2 จากสัปดาห์ก่อน</span></div>
+          <div class="card metric"><label>ใบสั่งซื้อที่เปิดอยู่</label><strong id="metricPoCount">14</strong><span class="trend">อัปเดตล่าสุด</span></div>
+          <div class="card metric"><label>มูลค่าจัดซื้อเดือนนี้</label><strong>฿482K</strong><span class="trend">↑ 12.5%</span></div>
+          <div class="card metric"><label>คะแนนผู้จำหน่ายเฉลี่ย</label><strong>4.6</strong><span class="trend">/ 5.0</span></div>
+        </section>
+
+        <div class="grid">
+          <section class="card section">
+            <div class="section-head">
+              <h3>คำสั่งซื้อล่าสุด (PO)</h3>
+              <div><button class="link" onclick="navigatePage(4, 'ใบสั่งซื้อ')">ดูทั้งหมด →</button></div>
+            </div>
+            <table>
+              <thead><tr><th>เลขที่</th><th>ผู้จำหน่าย</th><th>รายการ</th><th>สถานะ</th></tr></thead>
+              <tbody id="dashboardOrderTableBody"></tbody>
+            </table>
+          </section>
+
+          <section class="card section chat" id="chat">
+            <div class="section-head"><h3>✦ ผู้ช่วยจัดซื้อ AI (Offline Mode)</h3><span class="pill approved" style="background:#e8f0fe; color:#1a73e8;">พร้อมใช้งาน</span></div>
+            <div class="messages" id="messages">
+              <div class="message bot">สวัสดีค่ะ ฉันคือ AI Assistant ประจำฝ่ายจัดซื้อ วันนี้มีอะไรให้ช่วยค้นหาเกี่ยวกับการจัดซื้อ ผู้จำหน่าย หรือคลังเอกสารไหมคะ?</div>
+            </div>
+            <form class="chat-form" id="chatForm">
+              <input id="question" placeholder="พิมพ์คำถาม... (เช่น สรุปยอด, เมล็ดกาแฟ, ผู้จำหน่าย)" autocomplete="off" />
+              <button class="send">ส่ง</button>
+            </form>
+          </section>
+        </div>
+      </div>
+
+      <!-- 2. หน้าคำขอจัดซื้อ (PR) -->
+      <div id="page-pr" class="content-view">
+        <section class="card section">
+            <div class="section-head">
+              <h3>รายการคำขอจัดซื้อทั้งหมด (Purchase Requisitions)</h3>
+              <div><button class="link" id="togglePrFormBtn" style="margin-right: 15px; font-size: 13px;">+ สร้างคำขอ PR</button></div>
+            </div>
+            <form class="add-form" id="addPrForm">
+              <input id="inputPrNo" placeholder="เลขที่ PR (เช่น PR-2608-001)" required>
+              <input id="inputPrItem" placeholder="รายการที่ต้องการ" required>
+              <input id="inputPrDept" placeholder="แผนกที่ร้องขอ" required>
+              <button type="submit" class="send">บันทึกคำขอ</button>
+            </form>
+            <table>
+              <thead><tr><th>เลขที่ PR</th><th>รายการสินค้า</th><th>แผนกที่ร้องขอ</th><th>สถานะการอนุมัติ</th><th style="text-align: center;">จัดการ</th></tr></thead>
+              <tbody id="prTableBody"></tbody>
+            </table>
+        </section>
+      </div>
+
+      <!-- 3. หน้าใบสั่งซื้อ (PO) -->
+      <div id="page-po" class="content-view">
+        <section class="card section">
+            <div class="section-head">
+              <h3>รายการใบสั่งซื้อทั้งหมด (Purchase Orders)</h3>
+              <div><button class="link" id="togglePoFormBtn" style="margin-right: 15px; font-size: 13px;">+ สร้างใบสั่งซื้อ PO</button></div>
+            </div>
+            <form class="add-form" id="addPoForm">
+              <input id="inputPoNo" placeholder="เลขที่ PO (เช่น PO-2607-xxx)" required>
+              <input id="inputPoSupplier" placeholder="ชื่อผู้จำหน่าย" required>
+              <input id="inputPoItem" placeholder="รายการสินค้า" required>
+              <select id="inputPoStatus">
+                  <option value="pending">รอส่งสินค้า</option>
+                  <option value="approved">อนุมัติแล้ว</option>
+                  <option value="review">ตรวจรับสินค้า</option>
+              </select>
+              <button type="submit" class="send">บันทึกข้อมูล</button>
+            </form>
+            <table>
+              <thead><tr><th>เลขที่ PO</th><th>ผู้จำหน่าย</th><th>รายการ</th><th>สถานะ</th><th style="text-align: center;">จัดการ</th></tr></thead>
+              <tbody id="poPageTableBody"></tbody>
+            </table>
+        </section>
+      </div>
+
+      <!-- 4. หน้าผู้จำหน่าย (Suppliers) -->
+      <div id="page-supplier" class="content-view">
+        <section class="card section">
+            <div class="section-head">
+              <h3>รายชื่อผู้จำหน่ายทั้งหมด (Suppliers)</h3>
+              <div><button class="link" id="toggleSupplierFormBtn" style="margin-right: 15px; font-size: 13px;">+ เพิ่มผู้จำหน่าย</button></div>
+            </div>
+            <form class="add-form" id="addSupplierForm">
+              <input id="inputSupName" placeholder="ชื่อผู้จำหน่าย / บริษัท" required>
+              <input id="inputSupContact" placeholder="เบอร์ติดต่อ หรือ อีเมล" required>
+              <input id="inputSupRating" placeholder="คะแนนประเมิน (เต็ม 5)" type="number" step="0.1" max="5" required>
+              <button type="submit" class="send">บันทึกข้อมูล</button>
+            </form>
+            <table>
+              <thead>
+                <tr><th>รายชื่อบริษัท/ผู้จำหน่าย</th><th>ข้อมูลการติดต่อ</th><th>คะแนนเฉลี่ย</th><th style="text-align: center;">จัดการ</th></tr>
+              </thead>
+              <tbody id="supplierTableBody"></tbody>
+            </table>
+        </section>
+      </div>
+
+      <!-- 5. หน้าคลังเอกสาร -->
+      <div id="page-docs" class="content-view">
+        <section class="card section">
+            <div class="section-head">
+              <h3>คลังเอกสารจัดซื้อ (Document Archive)</h3>
+              <div><button class="link" id="toggleDocFormBtn" style="margin-right: 15px; font-size: 13px;">+ เพิ่มเอกสาร</button></div>
+            </div>
+            
+            <form class="add-form" id="addDocForm">
+              <input id="inputDocName" placeholder="ชื่อเอกสาร หรือ หัวข้อย่อ" required>
+              <input id="inputDocDetail" placeholder="รายละเอียดแบบสั้นๆ (ถ้ามี)">
+              <select id="inputDocType">
+                  <option value="AI_Summary">สรุปจาก AI</option>
+                  <option value="PDF">ไฟล์ PDF</option>
+                  <option value="Note">บันทึกทั่วไป</option>
+              </select>
+              <button type="submit" class="send">จัดเก็บเอกสาร</button>
+            </form>
+
+            <table>
+              <thead>
+                <tr><th>วันที่บันทึก</th><th>ชื่อเอกสาร</th><th>ประเภท</th><th style="text-align: center;">จัดการ</th></tr>
+              </thead>
+              <tbody id="docTableBody"></tbody>
+            </table>
+        </section>
+      </div>
+
+      <!-- หน้าอื่นๆ -->
+      <div id="page-other" class="content-view">
+        <section class="card section" style="text-align: center; padding: 100px 20px;">
+          <h2 id="otherPageHeading" style="font-size: 24px; margin-bottom: 10px;">...</h2>
+          <p style="color: var(--muted); line-height: 1.6;">หน้านี้ถูกสร้างขึ้นเพื่อใช้แสดงผลในการจำลอง Prototype<br>คุณสามารถออกแบบเนื้อหาเพิ่มเติมและนำมาใส่ในส่วนนี้ได้ในภายหลัง</p>
+        </section>
+      </div>
+
+    </main>
+  </div>
+  
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const thaiDate = new Intl.DateTimeFormat('th-TH',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(new Date());
+    document.getElementById('today').textContent = thaiDate;
+    const toast = (text) => { const e = document.getElementById('toast'); e.textContent = text; e.classList.add('show'); setTimeout(() => e.classList.remove('show'), 2600); };
+    document.getElementById('askAi').onclick = () => { document.getElementById('chat').scrollIntoView({behavior:'smooth',block:'center'}); document.getElementById('question').focus(); };
+
+    // ==========================================
+    // 🔐 1. ระบบ Login
+    // ==========================================
+    const loginPage = document.getElementById('login-page');
+    const mainApp = document.getElementById('main-app');
+    const loginError = document.getElementById('loginError');
+
+    if(localStorage.getItem('isLoggedIn') === 'true') {
+        loginPage.style.display = 'none';
+        mainApp.style.display = 'grid';
+    }
+
+    document.getElementById('loginForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const user = document.getElementById('username').value;
+        const pass = document.getElementById('password').value;
+        if(user === 'admin' && pass === '1234') {
+            localStorage.setItem('isLoggedIn', 'true');
+            loginPage.style.display = 'none';
+            mainApp.style.display = 'grid';
+            toast('เข้าสู่ระบบสำเร็จ ยินดีต้อนรับ!');
+        } else {
+            loginError.style.display = 'block';
+        }
+    });
+
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+        localStorage.setItem('isLoggedIn', 'false');
+        mainApp.style.display = 'none';
+        loginPage.style.display = 'flex';
+        document.getElementById('password').value = '';
+        loginError.style.display = 'none';
+    });
+
+
+    // ==========================================
+    // 📁 2. ระบบตาราง (คลังเอกสาร)
+    // ==========================================
+    const defaultDocs = [
+        { id: 1, date: "11/07/2026", name: "นโยบายการจัดซื้อประจำปี 2026", type: "PDF", detail: "เอกสารแจกแจงข้อกำหนด" },
+        { id: 2, date: "10/07/2026", name: "รายงานการประเมินผู้จำหน่าย Q2", type: "Note", detail: "สรุปจากที่ประชุม" }
+    ];
+    let docs = JSON.parse(localStorage.getItem('coffeeDocs')) || defaultDocs;
+
+    function renderDocTable() {
+      const tbody = document.getElementById('docTableBody'); tbody.innerHTML = '';
+      if(docs.length === 0) { tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding: 20px;">ยังไม่มีเอกสารในคลัง</td></tr>`; return; }
+      docs.forEach(d => { tbody.innerHTML += `<tr><td>${d.date}</td><td class="supplier">${d.name} <span class="sub">${d.detail || ''}</span></td><td><span class="pill" style="background:#e8ecef; color:#3b4a54;">${d.type}</span></td><td style="text-align: center;"><button class="btn-delete" onclick="deleteDoc(${d.id})">✖</button></td></tr>`; });
+    }
+    
+    window.deleteDoc = function(id) { 
+        if(confirm('ต้องการลบเอกสารนี้ออกจากคลังหรือไม่?')) { 
+            docs = docs.filter(d => d.id !== id); 
+            localStorage.setItem('coffeeDocs', JSON.stringify(docs)); 
+            renderDocTable(); 
+            toast('ลบเอกสารแล้ว');
+        } 
+    };
+    
+    document.getElementById('toggleDocFormBtn').addEventListener('click', () => document.getElementById('addDocForm').classList.toggle('active'));
+    document.getElementById('addDocForm').addEventListener('submit', e => { 
+        e.preventDefault(); 
+        const todayStr = new Intl.DateTimeFormat('th-TH',{day:'2-digit',month:'2-digit',year:'numeric'}).format(new Date());
+        docs.unshift({ id: Date.now(), date: todayStr, name: document.getElementById('inputDocName').value.trim(), detail: document.getElementById('inputDocDetail').value.trim(), type: document.getElementById('inputDocType').value }); 
+        localStorage.setItem('coffeeDocs', JSON.stringify(docs)); 
+        renderDocTable(); document.getElementById('addDocForm').reset(); document.getElementById('addDocForm').classList.remove('active'); toast('บันทึกเอกสารเรียบร้อย'); 
+    });
+
+    window.saveAiToDocs = function(aiTextSnippet) {
+        const todayStr = new Intl.DateTimeFormat('th-TH',{day:'2-digit',month:'2-digit',year:'numeric'}).format(new Date());
+        docs.unshift({ id: Date.now(), date: todayStr, name: "ข้อความสรุปจาก AI", detail: aiTextSnippet + "...", type: "AI_Summary" });
+        localStorage.setItem('coffeeDocs', JSON.stringify(docs)); renderDocTable(); toast('บันทึกคำตอบ AI ลงคลังเอกสารแล้ว!');
+    };
+
+
+    // ==========================================
+    // 🤖 3. ระบบ AI จำลอง (Mock AI แบบ 100% ตอบได้ชัวร์)
+    // ==========================================
+    document.getElementById('chatForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const input = document.getElementById('question');
+      const q = input.value.trim();
+      if(!q) return;
+      
+      const messages = document.getElementById('messages');
+      messages.insertAdjacentHTML('beforeend', `<div class="message user">${q}</div>`);
+      input.value = '';
+      messages.scrollTop = messages.scrollHeight;
+      
+      const loadingId = 'loading-' + Date.now();
+      messages.insertAdjacentHTML('beforeend', `<div class="message bot loading-ai" id="${loadingId}">กำลังวิเคราะห์ข้อมูลจัดซื้อ...</div>`);
+      messages.scrollTop = messages.scrollHeight;
+
+      setTimeout(() => {
+          document.getElementById(loadingId).remove();
+          
+          let reply = "ขออภัยค่ะ ฉันยังไม่ค่อยเข้าใจ ลองถามเกี่ยวกับ 'การจัดซื้อ', 'ผู้จำหน่าย', หรือ 'เมล็ดกาแฟ' ดูนะคะ";
+          
+          if(q.includes("กาแฟ") || q.includes("เมล็ด")) {
+              reply = "ตอนนี้เรามีเมล็ดกาแฟยอดฮิตคือ 'คั่วกลาง' จากเชียงใหม่ อาราบิก้า และ 'เมล็ดพิเศษ' จาก Doi Chang ค่ะ สต็อกยังอยู่ในระดับปกติค่ะ";
+          } else if(q.includes("ผู้จำหน่าย") || q.includes("ใครดี") || q.includes("คะแนน")) {
+              reply = "จากการประเมินล่าสุด 'เชียงใหม่ อาราบิก้า' มีคะแนนสูงสุดที่ 4.8 ดาวค่ะ แนะนำให้เปิดใบสั่งซื้อ (PO) จากเจ้านี้เพื่อความรวดเร็วและได้ของคุณภาพค่ะ";
+          } else if(q.includes("สรุป") || q.includes("ยอด") || q.includes("รายงาน")) {
+              reply = "เดือนนี้มีใบสั่งซื้อเปิดอยู่ 14 รายการ มูลค่ารวม 482,000 บาท การจัดซื้อเป็นไปตามแผน 85% และมีคำขอ PR รอตรวจสอบอีก 8 รายการค่ะ";
+          } else if(q.includes("สวัสดี")) {
+              reply = "สวัสดีค่ะ! วันนี้มีรายการคำขอ PR รอให้คุณตรวจสอบอยู่นะคะ ให้ฉันช่วยเปรียบเทียบราคาผู้จำหน่ายให้ไหมคะ?";
+          } else if(q.includes("ขอบคุณ")) {
+              reply = "ยินดีเสมอค่ะ! หากต้องการให้ช่วยเปิดใบสั่งซื้อ หรือสรุปเอกสารเพิ่มเติม แจ้ง Smart Coffee ได้ตลอดเลยนะคะ ☕";
+          }
+
+          const snippet = reply.substring(0, 30).replace(/["']/g, ""); 
+          
+          messages.insertAdjacentHTML('beforeend', `
+            <div class="message bot">
+                ${reply}
+                <div class="source" style="margin-top: 10px; border-top: 1px dashed #d9cbbf; padding-top: 5px; display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                    Smart Coffee AI (Offline Mode)
+                    <button onclick="saveAiToDocs('${snippet}')" style="margin-left:auto; padding:4px 8px; font-size:11px; cursor:pointer; background:var(--sage); color:white; border:none; border-radius:4px;">
+                        💾 บันทึกลงคลังเอกสาร
+                    </button>
+                </div>
+            </div>`);
+          messages.scrollTop = messages.scrollHeight;
+      }, 1500); 
+    });
+
+
+    // ==========================================
+    // 🟢 4. ระบบ Sidebar และ Routing
+    // ==========================================
+    const defaultNavItems = [
+      { id: 1, cat: 'Overview', ic: '▦', n: 'แดชบอร์ด' }, { id: 3, cat: 'Procurement', ic: '◫', n: 'คำขอจัดซื้อ' },
+      { id: 4, cat: 'Procurement', ic: '▤', n: 'ใบสั่งซื้อ' }, { id: 5, cat: 'Procurement', ic: '♙', n: 'ผู้จำหน่าย' }, { id: 7, cat: 'Workspace', ic: '▱', n: 'คลังเอกสาร' }
+    ];
+    let navItems = JSON.parse(localStorage.getItem('smartCoffeeNav')) || defaultNavItems;
+    let activeMenuId = 1;
+
+    function renderSidebar() {
+      const nav = document.getElementById('dynamicNav'); let html = '';
+      const categories = [...new Set(navItems.map(i => i.cat))]; 
+      categories.forEach(c => {
+        const items = navItems.filter(i => i.cat === c);
+        if(items.length > 0) {
+            html += `<div class="nav-title">${c}</div>`;
+            items.forEach(item => {
+              const isActive = item.id === activeMenuId ? 'active' : '';
+              html += `<div class="nav-item-wrapper"><button class="nav-item ${isActive}" onclick="navigatePage(${item.id}, '${item.n}')"><span class="ico">${item.ic}</span>${item.n}</button><button class="del-menu" onclick="deleteMenu(${item.id})">✖</button></div>`;
+            });
+        }
+      });
+      nav.innerHTML = html;
+    }
+
+    window.navigatePage = function(id, name) {
+      activeMenuId = id; renderSidebar();
+      document.getElementById('pageTitle').textContent = name; document.getElementById('pageDesc').textContent = 'ระบบจัดการข้อมูล ' + name;
+      document.querySelectorAll('.content-view').forEach(el => el.classList.remove('active'));
+      
+      if (name === 'แดชบอร์ด') { document.getElementById('page-dashboard').classList.add('active'); document.getElementById('pageDesc').textContent = 'ภาพรวมงานจัดซื้อเมล็ดกาแฟของคุณ'; } 
+      else if (name === 'คำขอจัดซื้อ') { document.getElementById('page-pr').classList.add('active'); }
+      else if (name === 'ใบสั่งซื้อ') { document.getElementById('page-po').classList.add('active'); }
+      else if (name === 'ผู้จำหน่าย') { document.getElementById('page-supplier').classList.add('active'); } 
+      else if (name === 'คลังเอกสาร') { document.getElementById('page-docs').classList.add('active'); } 
+      else { document.getElementById('page-other').classList.add('active'); document.getElementById('otherPageHeading').textContent = 'ส่วนแสดงผลข้อมูล: ' + name; }
+    };
+
+    window.deleteMenu = function(id) {
+      if(confirm('ต้องการลบเมนูนี้ออกใช่หรือไม่?')) {
+        navItems = navItems.filter(item => item.id !== id); localStorage.setItem('smartCoffeeNav', JSON.stringify(navItems));
+        if(activeMenuId === id) navigatePage(1, 'แดชบอร์ด'); else renderSidebar();
+      }
+    };
+
+    document.getElementById('toggleEditModeBtn').addEventListener('click', () => { document.getElementById('dynamicNav').classList.toggle('editing'); document.getElementById('newMenuForm').classList.toggle('active'); });
+    document.getElementById('newMenuForm').addEventListener('submit', (e) => { e.preventDefault(); navItems.push({ id: Date.now(), ic: document.getElementById('newMenuIcon').value.trim(), n: document.getElementById('newMenuName').value.trim(), cat: document.getElementById('newMenuCategory').value }); localStorage.setItem('smartCoffeeNav', JSON.stringify(navItems)); renderSidebar(); document.getElementById('newMenuForm').reset(); toast('เพิ่มเมนูใหม่สำเร็จ!'); });
+
+
+    // ==========================================
+    // 🟢 5. ระบบตาราง (ผู้จำหน่าย)
+    // ==========================================
+    const defaultSuppliers = [{ id: 1, name: "เชียงใหม่ อาราบิก้า", contact: "081-999-XXXX", rating: 4.8 }, { id: 2, name: "Doi Chang Coffee", contact: "082-555-XXXX", rating: 4.5 }];
+    let suppliers = JSON.parse(localStorage.getItem('coffeeSuppliers')) || defaultSuppliers;
+    function renderSupplierTable() {
+      const tbody = document.getElementById('supplierTableBody'); tbody.innerHTML = '';
+      if(suppliers.length === 0) { tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding: 20px;">ไม่มีข้อมูลผู้จำหน่าย</td></tr>`; return; }
+      suppliers.forEach(sup => { tbody.innerHTML += `<tr><td class="supplier">${sup.name}</td><td>${sup.contact}</td><td><span style="color:#d87436;">★</span> ${sup.rating} / 5.0</td><td style="text-align: center;"><button class="btn-delete" onclick="deleteSupplier(${sup.id})">✖</button></td></tr>`; });
+    }
+    window.deleteSupplier = function(id) { if(confirm('ต้องการลบข้อมูล?')) { suppliers = suppliers.filter(s => s.id !== id); localStorage.setItem('coffeeSuppliers', JSON.stringify(suppliers)); renderSupplierTable(); toast('ลบข้อมูลเรียบร้อย');} };
+    document.getElementById('toggleSupplierFormBtn').addEventListener('click', () => document.getElementById('addSupplierForm').classList.toggle('active'));
+    document.getElementById('addSupplierForm').addEventListener('submit', e => { e.preventDefault(); suppliers.unshift({ id: Date.now(), name: document.getElementById('inputSupName').value.trim(), contact: document.getElementById('inputSupContact').value.trim(), rating: document.getElementById('inputSupRating').value.trim() }); localStorage.setItem('coffeeSuppliers', JSON.stringify(suppliers)); renderSupplierTable(); document.getElementById('addSupplierForm').reset(); document.getElementById('addSupplierForm').classList.remove('active'); toast('เพิ่มผู้จำหน่ายแล้ว'); });
+
+    // ==========================================
+    // 🟢 6. ระบบตาราง (คำขอจัดซื้อ - PR)
+    // ==========================================
+    const defaultPRs = [{ id: 1, pr: "PR-2608-012", item: "เครื่องบดเมล็ดกาแฟ", dept: "Barista", status: "review", statusText: "รอหัวหน้าอนุมัติ" }];
+    let prs = JSON.parse(localStorage.getItem('coffeePRs')) || defaultPRs;
+    function renderPrTable() {
+      const tbody = document.getElementById('prTableBody'); tbody.innerHTML = '';
+      if(prs.length === 0) { tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding: 20px;">ไม่มีข้อมูลคำขอ</td></tr>`; return; }
+      prs.forEach(pr => { tbody.innerHTML += `<tr><td>${pr.pr}</td><td class="supplier">${pr.item}</td><td>${pr.dept}</td><td><span class="pill ${pr.status}">${pr.statusText}</span></td><td style="text-align: center;"><button class="btn-delete" onclick="deletePR(${pr.id})">✖</button></td></tr>`; });
+    }
+    window.deletePR = function(id) { if(confirm('ต้องการลบคำขอจัดซื้อนี้?')) { prs = prs.filter(p => p.id !== id); localStorage.setItem('coffeePRs', JSON.stringify(prs)); renderPrTable(); toast('ลบ PR แล้ว');} };
+    document.getElementById('togglePrFormBtn').addEventListener('click', () => document.getElementById('addPrForm').classList.toggle('active'));
+    document.getElementById('addPrForm').addEventListener('submit', e => { e.preventDefault(); prs.unshift({ id: Date.now(), pr: document.getElementById('inputPrNo').value.trim(), item: document.getElementById('inputPrItem').value.trim(), dept: document.getElementById('inputPrDept').value.trim(), status: "review", statusText: "รอตรวจสอบ" }); localStorage.setItem('coffeePRs', JSON.stringify(prs)); renderPrTable(); document.getElementById('addPrForm').reset(); document.getElementById('addPrForm').classList.remove('active'); toast('สร้าง PR เรียบร้อย'); });
+
+    // ==========================================
+    // 🟢 7. ระบบตาราง (ใบสั่งซื้อ - PO)
+    // ==========================================
+    const defaultOrders = [{ id: 1, po: "PO-2607-024", supplier: "เชียงใหม่ อาราบิก้า", item: "เมล็ดคั่วกลาง", status: "pending", statusText: "รอส่งสินค้า" }, { id: 2, po: "PO-2607-023", supplier: "Doi Chang Coffee", item: "เมล็ดพิเศษ", status: "approved", statusText: "อนุมัติแล้ว" }];
+    let orders = JSON.parse(localStorage.getItem('coffeeOrders')) || defaultOrders;
+    
+    function renderPoTables() {
+      const dbBody = document.getElementById('dashboardOrderTableBody');
+      const poBody = document.getElementById('poPageTableBody');
+      dbBody.innerHTML = ''; poBody.innerHTML = '';
+      
+      document.getElementById('metricPoCount').textContent = orders.length;
+
+      if(orders.length === 0) { 
+          const empty = `<tr><td colspan="5" style="text-align:center; padding: 20px;">ไม่มีข้อมูลคำสั่งซื้อ</td></tr>`;
+          dbBody.innerHTML = empty; poBody.innerHTML = empty; return; 
+      }
+      
+      orders.forEach((order, index) => { 
+        const rowHTML = `<tr><td>${order.po}</td><td class="supplier">${order.supplier}</td><td>${order.item}</td><td><span class="pill ${order.status}">${order.statusText}</span></td>`;
+        if(index < 3) { dbBody.innerHTML += rowHTML + `</tr>`; }
+        poBody.innerHTML += rowHTML + `<td style="text-align: center;"><button class="btn-delete" onclick="deleteOrder(${order.id})">✖</button></td></tr>`; 
+      });
+    }
+
+    window.deleteOrder = function(id) { if(confirm('ต้องการลบใบสั่งซื้อนี้?')) { orders = orders.filter(o => o.id !== id); localStorage.setItem('coffeeOrders', JSON.stringify(orders)); renderPoTables(); toast('ลบ PO แล้ว');} };
+    document.getElementById('togglePoFormBtn').addEventListener('click', () => document.getElementById('addPoForm').classList.toggle('active'));
+    document.getElementById('addPoForm').addEventListener('submit', e => { 
+        e.preventDefault(); 
+        const statusVal = document.getElementById('inputPoStatus').value;
+        const statusText = document.getElementById('inputPoStatus').options[document.getElementById('inputPoStatus').selectedIndex].text;
+        orders.unshift({ id: Date.now(), po: document.getElementById('inputPoNo').value.trim(), supplier: document.getElementById('inputPoSupplier').value.trim(), item: document.getElementById('inputPoItem').value.trim(), status: statusVal, statusText: statusText }); 
+        localStorage.setItem('coffeeOrders', JSON.stringify(orders)); 
+        renderPoTables(); document.getElementById('addPoForm').reset(); document.getElementById('addPoForm').classList.remove('active'); toast('สร้างใบสั่งซื้อเรียบร้อย'); 
+    });
+
+    // เริ่มทำงานเมื่อเปิดเว็บทั้งหมด
+    renderSidebar(); renderPoTables(); renderPrTable(); renderSupplierTable(); renderDocTable();
+  </script>
+</body>
+</html>
