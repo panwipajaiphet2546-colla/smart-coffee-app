@@ -5,11 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Smart Coffee AI Assistant</title>
   <style>
-    /* 🎨 ตั้งค่าตัวแปรสีและโครงสร้างหลัก */
     :root { --ink:#28201c; --muted:#7b706a; --cream:#f8f4ed; --paper:#fffdf9; --line:#eadfd3; --coffee:#643b29; --orange:#d87436; --sage:#4f7665; --shadow:0 16px 40px rgba(73,44,29,.09); }
     * { box-sizing:border-box; } body { margin:0; font-family:system-ui,-apple-system,"Segoe UI",sans-serif; color:var(--ink); background:var(--cream); }
     
-    /* 🔐 สไตล์สำหรับหน้า Login */
     #login-page { position: fixed; inset: 0; background: var(--cream); display: flex; align-items: center; justify-content: center; z-index: 1000; }
     .login-box { background: var(--paper); padding: 40px; border-radius: 16px; box-shadow: var(--shadow); width: 100%; max-width: 380px; text-align: center; border: 1px solid var(--line); }
     .login-box h2 { margin: 0 0 5px; font-size: 24px; color: var(--coffee); }
@@ -20,10 +18,8 @@
     .login-form button:hover { background: #b85f29; }
     .error-msg { color: #d87436; font-size: 12px; display: none; margin-top: -5px; }
 
-    /* 📌 โครงสร้างแอปหลัก */
     .app { min-height:100vh; display:none; grid-template-columns:248px 1fr; }
     
-    /* เมนูด้านข้าง (Sidebar) */
     aside { background:#30231e; color:#f8eee5; padding:28px 16px; display:flex; flex-direction:column; gap:26px; overflow-y:auto; }
     .brand { display:flex; gap:11px; align-items:center; padding:0 10px; font-weight:750; line-height:1.1; }
     .bean { width:35px; height:35px; border-radius:50% 48% 52% 48%; background:#df7d40; position:relative; transform:rotate(-25deg); } .bean:after { content:""; position:absolute; inset:4px 15px 4px 15px; border-left:2px solid #6a3825; border-radius:50%; }
@@ -43,7 +39,6 @@
     .profile { margin-top:auto; border-top:1px solid #594137; padding:19px 10px 0; display:flex; gap:10px; align-items:center; font-size:13px; } .avatar { width:31px; height:31px; border-radius:50%; display:grid; place-items:center; background:#8eaa95; color:#163328; font-weight:800; }
     .btn-logout { background: #1f1511; color: #ff6b6b; border: 1px solid #4a332a; border-radius: 8px; padding: 10px; cursor: pointer; font-size: 12px; font-weight: bold; margin-top: 15px; transition: 0.2s; } .btn-logout:hover { background: #ff6b6b; color: white; }
 
-    /* 📄 ส่วนเนื้อหาหลัก */
     main { padding:29px 36px 36px; max-width:1500px; width:100%; margin:auto; } 
     header { display:flex; justify-content:space-between; align-items:center; margin-bottom:27px; border-bottom: 1px solid var(--line); padding-bottom: 20px; }
     h1 { font-size:27px; margin:0; letter-spacing:-.04em; } header p { margin:5px 0 0; color:var(--muted); font-size:14px; } .date { color:var(--muted); font-size:13px; }
@@ -51,7 +46,6 @@
     .content-view { display: none; animation: fadeIn 0.3s ease; } .content-view.active { display: block; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* สไตล์การ์ด ตาราง และแชท */
     .top { display:grid; grid-template-columns:1.15fr .85fr; gap:20px; } .card { background:var(--paper); border:1px solid var(--line); box-shadow:var(--shadow); border-radius:15px; }
     .hero { padding:27px 28px; background:linear-gradient(120deg,#68402d,#8a5134); color:#fff9f3; position:relative; overflow:hidden; } .hero:after { content:""; position:absolute; height:290px; width:290px; border:28px solid rgba(255,255,255,.06); border-radius:50%; right:-110px; top:-118px; }
     .eyebrow { color:#f5bd91; text-transform:uppercase; letter-spacing:.13em; font-size:10px; font-weight:700; } .hero h2 { max-width:420px; font-size:26px; line-height:1.23; letter-spacing:-.035em; margin:11px 0; } .hero p { max-width:480px; color:#ead9ce; line-height:1.6; font-size:14px; }
@@ -75,7 +69,6 @@
 </head>
 <body>
   
-  <!-- 🔐 โซนหน้า Login -->
   <div id="login-page">
     <div class="login-box">
         <h2>Smart Coffee</h2>
@@ -89,7 +82,6 @@
     </div>
   </div>
 
-  <!-- โซนแอปหลัก -->
   <div class="app" id="main-app">
     
     <aside>
@@ -110,7 +102,7 @@
 
       <div class="profile">
         <div class="avatar">PK</div>
-        <div><b>พรรณวิภา กาแฟดี</b><small style="display:block;color:#bcaea6;margin-top:3px">Procurement Manager</small></div>
+        <div><b>พิชญา กาแฟดี</b><small style="display:block;color:#bcaea6;margin-top:3px">Procurement Manager</small></div>
       </div>
       <button class="btn-logout" id="logoutBtn">🚪 ออกจากระบบ</button>
     </aside>
@@ -124,9 +116,7 @@
         <div class="date" id="today"></div>
       </header>
 
-      <!-- ========================================== -->
       <!-- 1. หน้าแดชบอร์ด -->
-      <!-- ========================================== -->
       <div id="page-dashboard" class="content-view active">
         <div class="top">
           <section class="card hero"><div class="eyebrow">AI Procurement Insight</div><h2>ตัดสินใจจัดซื้ออย่างมั่นใจ ด้วยข้อมูลที่ครบถ้วน</h2><p>ให้ AI ช่วยเปรียบเทียบผู้จำหน่าย ค้นหานโยบาย และสรุปเอกสารจัดซื้อของคุณได้ทันที</p><button id="askAi">เริ่มถามผู้ช่วย AI →</button></section>
@@ -165,9 +155,7 @@
         </div>
       </div>
 
-      <!-- ========================================== -->
       <!-- 2. หน้าคำขอจัดซื้อ (PR) -->
-      <!-- ========================================== -->
       <div id="page-pr" class="content-view">
         <section class="card section">
             <div class="section-head">
@@ -187,9 +175,7 @@
         </section>
       </div>
 
-      <!-- ========================================== -->
       <!-- 3. หน้าใบสั่งซื้อ (PO) -->
-      <!-- ========================================== -->
       <div id="page-po" class="content-view">
         <section class="card section">
             <div class="section-head">
@@ -214,9 +200,7 @@
         </section>
       </div>
 
-      <!-- ========================================== -->
       <!-- 4. หน้าผู้จำหน่าย (Suppliers) -->
-      <!-- ========================================== -->
       <div id="page-supplier" class="content-view">
         <section class="card section">
             <div class="section-head">
@@ -238,9 +222,7 @@
         </section>
       </div>
 
-      <!-- ========================================== -->
       <!-- หน้าอื่นๆ -->
-      <!-- ========================================== -->
       <div id="page-other" class="content-view">
         <section class="card section" style="text-align: center; padding: 100px 20px;">
           <h2 id="otherPageHeading" style="font-size: 24px; margin-bottom: 10px;">...</h2>
@@ -296,8 +278,9 @@
     // ==========================================
     // 🤖 ระบบ AI (Gemini)
     // ==========================================
-    // ⚠️ นำ API Key มาใส่ตรงนี้
-    const GEMINI_API_KEY = 'AQ.Ab8RN6LrZ7h8qW8Auppf3aYEiD03vxU7sIHQS3vMfpgNPq81eg'; 
+    
+    // ใส่ API Key ที่นี่
+    const GEMINI_API_KEY = 'AIzaSyBnX8_d_IP7kXTw9tTFbYjpmzGVi_p1dyA'; 
 
     document.getElementById('chatForm').addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -329,7 +312,6 @@
         
         const data = await response.json();
         
-        // --- ส่วนที่เพิ่มใหม่: ดักจับ Error จาก Google ---
         if (!response.ok) {
             throw new Error(data.error?.message || "เชื่อมต่อ Google API ไม่สำเร็จ");
         }
@@ -344,7 +326,6 @@
         
       } catch (error) {
         document.getElementById(loadingId).remove();
-        // โชว์ Error จริงๆ จากระบบให้เห็นชัดๆ
         messages.insertAdjacentHTML('beforeend', `<div class="message bot" style="color:red;">เกิดข้อผิดพลาด: ${error.message}</div>`);
       }
       messages.scrollTop = messages.scrollHeight;
@@ -413,7 +394,6 @@
     document.getElementById('toggleSupplierFormBtn').addEventListener('click', () => document.getElementById('addSupplierForm').classList.toggle('active'));
     document.getElementById('addSupplierForm').addEventListener('submit', e => { e.preventDefault(); suppliers.unshift({ id: Date.now(), name: document.getElementById('inputSupName').value.trim(), contact: document.getElementById('inputSupContact').value.trim(), rating: document.getElementById('inputSupRating').value.trim() }); localStorage.setItem('coffeeSuppliers', JSON.stringify(suppliers)); renderSupplierTable(); document.getElementById('addSupplierForm').reset(); document.getElementById('addSupplierForm').classList.remove('active'); toast('เพิ่มผู้จำหน่ายแล้ว'); });
 
-
     // ==========================================
     // 🟢 ระบบตาราง (คำขอจัดซื้อ - PR)
     // ==========================================
@@ -428,9 +408,8 @@
     document.getElementById('togglePrFormBtn').addEventListener('click', () => document.getElementById('addPrForm').classList.toggle('active'));
     document.getElementById('addPrForm').addEventListener('submit', e => { e.preventDefault(); prs.unshift({ id: Date.now(), pr: document.getElementById('inputPrNo').value.trim(), item: document.getElementById('inputPrItem').value.trim(), dept: document.getElementById('inputPrDept').value.trim(), status: "review", statusText: "รอตรวจสอบ" }); localStorage.setItem('coffeePRs', JSON.stringify(prs)); renderPrTable(); document.getElementById('addPrForm').reset(); document.getElementById('addPrForm').classList.remove('active'); toast('สร้าง PR เรียบร้อย'); });
 
-
     // ==========================================
-    // 🟢 ระบบตาราง (ใบสั่งซื้อ - PO) ใช้ร่วมกัน 2 หน้า
+    // 🟢 ระบบตาราง (ใบสั่งซื้อ - PO)
     // ==========================================
     const defaultOrders = [{ id: 1, po: "PO-2607-024", supplier: "เชียงใหม่ อาราบิก้า", item: "เมล็ดคั่วกลาง", status: "pending", statusText: "รอส่งสินค้า" }, { id: 2, po: "PO-2607-023", supplier: "Doi Chang Coffee", item: "เมล็ดพิเศษ", status: "approved", statusText: "อนุมัติแล้ว" }];
     let orders = JSON.parse(localStorage.getItem('coffeeOrders')) || defaultOrders;
@@ -440,7 +419,7 @@
       const poBody = document.getElementById('poPageTableBody');
       dbBody.innerHTML = ''; poBody.innerHTML = '';
       
-      document.getElementById('metricPoCount').textContent = orders.length; // อัปเดตตัวเลขหน้า Dashboard
+      document.getElementById('metricPoCount').textContent = orders.length;
 
       if(orders.length === 0) { 
           const empty = `<tr><td colspan="5" style="text-align:center; padding: 20px;">ไม่มีข้อมูลคำสั่งซื้อ</td></tr>`;
@@ -449,9 +428,7 @@
       
       orders.forEach((order, index) => { 
         const rowHTML = `<tr><td>${order.po}</td><td class="supplier">${order.supplier}</td><td>${order.item}</td><td><span class="pill ${order.status}">${order.statusText}</span></td>`;
-        // หน้า Dashboard โชว์แค่ 3 รายการล่าสุด และไม่มีปุ่มลบ
         if(index < 3) { dbBody.innerHTML += rowHTML + `</tr>`; }
-        // หน้า PO โชว์ทั้งหมดและมีปุ่มลบ
         poBody.innerHTML += rowHTML + `<td style="text-align: center;"><button class="btn-delete" onclick="deleteOrder(${order.id})">✖</button></td></tr>`; 
       });
     }
@@ -462,7 +439,6 @@
         e.preventDefault(); 
         const statusVal = document.getElementById('inputPoStatus').value;
         const statusText = document.getElementById('inputPoStatus').options[document.getElementById('inputPoStatus').selectedIndex].text;
-        
         orders.unshift({ id: Date.now(), po: document.getElementById('inputPoNo').value.trim(), supplier: document.getElementById('inputPoSupplier').value.trim(), item: document.getElementById('inputPoItem').value.trim(), status: statusVal, statusText: statusText }); 
         localStorage.setItem('coffeeOrders', JSON.stringify(orders)); 
         renderPoTables(); 
@@ -470,11 +446,7 @@
         toast('สร้างใบสั่งซื้อเรียบร้อย'); 
     });
 
-    // เริ่มทำงานเมื่อเปิดเว็บ
-    renderSidebar(); 
-    renderPoTables(); 
-    renderPrTable();
-    renderSupplierTable();
+    renderSidebar(); renderPoTables(); renderPrTable(); renderSupplierTable();
   </script>
 </body>
 </html>
