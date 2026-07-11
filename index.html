@@ -9,7 +9,6 @@
     :root { --ink:#28201c; --muted:#7b706a; --cream:#f8f4ed; --paper:#fffdf9; --line:#eadfd3; --coffee:#643b29; --orange:#d87436; --sage:#4f7665; --shadow:0 16px 40px rgba(73,44,29,.09); }
     * { box-sizing:border-box; } body { margin:0; font-family:system-ui,-apple-system,"Segoe UI",sans-serif; color:var(--ink); background:var(--cream); }
     
-    /* 🔐 สไตล์สำหรับหน้า Login */
     #login-page { position: fixed; inset: 0; background: var(--cream); display: flex; align-items: center; justify-content: center; z-index: 1000; }
     .login-box { background: var(--paper); padding: 40px; border-radius: 16px; box-shadow: var(--shadow); width: 100%; max-width: 380px; text-align: center; border: 1px solid var(--line); }
     .login-box h2 { margin: 0 0 5px; font-size: 24px; color: var(--coffee); }
@@ -20,10 +19,8 @@
     .login-form button:hover { background: #b85f29; }
     .error-msg { color: #d87436; font-size: 12px; display: none; margin-top: -5px; }
 
-    /* 📌 โครงสร้างแอปหลัก */
     .app { min-height:100vh; display:none; grid-template-columns:248px 1fr; }
     
-    /* เมนูด้านข้าง (Sidebar) */
     aside { background:#30231e; color:#f8eee5; padding:28px 16px; display:flex; flex-direction:column; gap:26px; overflow-y:auto; }
     .brand { display:flex; gap:11px; align-items:center; padding:0 10px; font-weight:750; line-height:1.1; }
     .bean { width:35px; height:35px; border-radius:50% 48% 52% 48%; background:#df7d40; position:relative; transform:rotate(-25deg); } .bean:after { content:""; position:absolute; inset:4px 15px 4px 15px; border-left:2px solid #6a3825; border-radius:50%; }
@@ -43,7 +40,6 @@
     .profile { margin-top:auto; border-top:1px solid #594137; padding:19px 10px 0; display:flex; gap:10px; align-items:center; font-size:13px; } .avatar { width:31px; height:31px; border-radius:50%; display:grid; place-items:center; background:#8eaa95; color:#163328; font-weight:800; }
     .btn-logout { background: #1f1511; color: #ff6b6b; border: 1px solid #4a332a; border-radius: 8px; padding: 10px; cursor: pointer; font-size: 12px; font-weight: bold; margin-top: 15px; transition: 0.2s; } .btn-logout:hover { background: #ff6b6b; color: white; }
 
-    /* 📄 ส่วนเนื้อหาหลัก */
     main { padding:29px 36px 36px; max-width:1500px; width:100%; margin:auto; } 
     header { display:flex; justify-content:space-between; align-items:center; margin-bottom:27px; border-bottom: 1px solid var(--line); padding-bottom: 20px; }
     h1 { font-size:27px; margin:0; letter-spacing:-.04em; } header p { margin:5px 0 0; color:var(--muted); font-size:14px; } .date { color:var(--muted); font-size:13px; font-weight: 500; }
@@ -51,7 +47,6 @@
     .content-view { display: none; animation: fadeIn 0.3s ease; } .content-view.active { display: block; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* สไตล์การ์ด ตาราง และแชท */
     .top { display:grid; grid-template-columns:1.15fr .85fr; gap:20px; } .card { background:var(--paper); border:1px solid var(--line); box-shadow:var(--shadow); border-radius:15px; }
     .hero { padding:27px 28px; background:linear-gradient(120deg,#68402d,#8a5134); color:#fff9f3; position:relative; overflow:hidden; } .hero:after { content:""; position:absolute; height:290px; width:290px; border:28px solid rgba(255,255,255,.06); border-radius:50%; right:-110px; top:-118px; }
     .eyebrow { color:#f5bd91; text-transform:uppercase; letter-spacing:.13em; font-size:10px; font-weight:700; } .hero h2 { max-width:420px; font-size:26px; line-height:1.23; letter-spacing:-.035em; margin:11px 0; } .hero p { max-width:480px; color:#ead9ce; line-height:1.6; font-size:14px; }
@@ -75,9 +70,6 @@
 </head>
 <body>
   
-  <!-- ========================================== -->
-  <!-- 🔐 หน้า Login -->
-  <!-- ========================================== -->
   <div id="login-page">
     <div class="login-box">
         <h2>Smart Coffee</h2>
@@ -91,15 +83,10 @@
     </div>
   </div>
 
-  <!-- ========================================== -->
-  <!-- โครงสร้างแอปหลัก -->
-  <!-- ========================================== -->
   <div class="app" id="main-app">
-    
     <aside>
       <div class="brand"><i class="bean"></i><div>Smart Coffee<small>AI PROCUREMENT</small></div></div>
       <nav id="dynamicNav"></nav>
-      
       <button class="btn-toggle-edit" id="toggleEditModeBtn">⚙️ จัดการเมนู</button>
       <form class="menu-edit-form" id="newMenuForm">
         <input type="text" id="newMenuIcon" placeholder="ไอคอน (เช่น 📦)" required>
@@ -111,7 +98,6 @@
         </select>
         <button type="submit">+ บันทึกเมนูใหม่</button>
       </form>
-
       <div class="profile">
         <div class="avatar">PK</div>
         <div><b>พิชญา กาแฟดี</b><small style="display:block;color:#bcaea6;margin-top:3px">Procurement Manager</small></div>
@@ -125,7 +111,7 @@
             <h1 id="pageTitle">แดชบอร์ด</h1>
             <p id="pageDesc">ภาพรวมงานจัดซื้อเมล็ดกาแฟของคุณ</p>
         </div>
-        <!-- ⏱️ จุดแสดงเวลาแบบ Real-time -->
+        <!-- ⏱️ แสดงเวลาแบบ Real-time -->
         <div class="date" id="today">กำลังโหลดเวลา...</div>
       </header>
 
@@ -156,12 +142,12 @@
           </section>
 
           <section class="card section chat" id="chat">
-            <div class="section-head"><h3>✦ ผู้ช่วยจัดซื้อ AI (Offline Mode)</h3><span class="pill approved" style="background:#e8f0fe; color:#1a73e8;">พร้อมใช้งาน</span></div>
+            <div class="section-head"><h3>✦ ผู้ช่วยจัดซื้อ AI (Real-time DB)</h3><span class="pill approved" style="background:#e8f0fe; color:#1a73e8;">เชื่อมต่อข้อมูลล่าสุด</span></div>
             <div class="messages" id="messages">
-              <div class="message bot">สวัสดีค่ะ ฉันคือ AI Assistant ประจำฝ่ายจัดซื้อ วันนี้มีอะไรให้ช่วยค้นหาเกี่ยวกับการจัดซื้อ ผู้จำหน่าย หรือคลังเอกสารไหมคะ?</div>
+              <div class="message bot">สวัสดีค่ะ ฉันคือ AI ประจำระบบจัดซื้อที่เชื่อมต่อกับฐานข้อมูลแบบ Real-time ลองถามฉันเกี่ยวกับรายชื่อ "ผู้จำหน่าย" ทั้งหมด หรือให้ "สรุปยอด" ใบสั่งซื้อดูสิคะ!</div>
             </div>
             <form class="chat-form" id="chatForm">
-              <input id="question" placeholder="พิมพ์คำถาม... (เช่น สรุปยอด, เมล็ดกาแฟ, ผู้จำหน่าย)" autocomplete="off" />
+              <input id="question" placeholder="พิมพ์คำถาม... (เช่น มีผู้จำหน่ายอะไรบ้าง?, สรุปยอด PO ให้หน่อย)" autocomplete="off" />
               <button class="send">ส่ง</button>
             </form>
           </section>
@@ -277,23 +263,18 @@
   <div class="toast" id="toast"></div>
 
   <script>
-    // ==========================================
-    // ⏱️ ระบบอัปเดตเวลาแบบ Real-time (เดินตลอดเวลา)
-    // ==========================================
+    // ⏱️ เวลา Real-time
     function updateClock() {
         const now = new Date();
         const options = { weekday:'long', day:'numeric', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit', second:'2-digit' };
         document.getElementById('today').textContent = new Intl.DateTimeFormat('th-TH', options).format(now) + " น.";
     }
-    setInterval(updateClock, 1000);
-    updateClock(); // เรียกใช้ครั้งแรกทันที
+    setInterval(updateClock, 1000); updateClock();
 
     const toast = (text) => { const e = document.getElementById('toast'); e.textContent = text; e.classList.add('show'); setTimeout(() => e.classList.remove('show'), 2600); };
     document.getElementById('askAi').onclick = () => { document.getElementById('chat').scrollIntoView({behavior:'smooth',block:'center'}); document.getElementById('question').focus(); };
 
-    // ==========================================
-    // 🔄 ระบบ Sync ข้อมูลอัตโนมัติ (อัปเดตข้ามแท็บ Real-time)
-    // ==========================================
+    // 🔄 Sync ข้อมูลข้ามแท็บ
     window.addEventListener('storage', (e) => {
         if(e.key === 'coffeeOrders') { orders = JSON.parse(e.newValue) || defaultOrders; renderPoTables(); }
         if(e.key === 'coffeePRs') { prs = JSON.parse(e.newValue) || defaultPRs; renderPrTable(); }
@@ -302,84 +283,32 @@
         if(e.key === 'smartCoffeeNav') { navItems = JSON.parse(e.newValue) || defaultNavItems; renderSidebar(); }
     });
 
-    // ==========================================
-    // 🔐 1. ระบบ Login
-    // ==========================================
+    // 🔐 ระบบ Login
     const loginPage = document.getElementById('login-page');
     const mainApp = document.getElementById('main-app');
     const loginError = document.getElementById('loginError');
 
-    if(localStorage.getItem('isLoggedIn') === 'true') {
-        loginPage.style.display = 'none';
-        mainApp.style.display = 'grid';
-    }
-
+    if(localStorage.getItem('isLoggedIn') === 'true') { loginPage.style.display = 'none'; mainApp.style.display = 'grid'; }
     document.getElementById('loginForm').addEventListener('submit', (e) => {
         e.preventDefault();
-        const user = document.getElementById('username').value;
-        const pass = document.getElementById('password').value;
-        if(user === 'admin' && pass === '1234') {
-            localStorage.setItem('isLoggedIn', 'true');
-            loginPage.style.display = 'none';
-            mainApp.style.display = 'grid';
-            toast('เข้าสู่ระบบสำเร็จ ยินดีต้อนรับ!');
-        } else {
-            loginError.style.display = 'block';
-        }
+        const user = document.getElementById('username').value; const pass = document.getElementById('password').value;
+        if(user === 'admin' && pass === '1234') { localStorage.setItem('isLoggedIn', 'true'); loginPage.style.display = 'none'; mainApp.style.display = 'grid'; toast('เข้าสู่ระบบสำเร็จ ยินดีต้อนรับ!');
+        } else { loginError.style.display = 'block'; }
     });
+    document.getElementById('logoutBtn').addEventListener('click', () => { localStorage.setItem('isLoggedIn', 'false'); mainApp.style.display = 'none'; loginPage.style.display = 'flex'; document.getElementById('password').value = ''; loginError.style.display = 'none'; });
 
-    document.getElementById('logoutBtn').addEventListener('click', () => {
-        localStorage.setItem('isLoggedIn', 'false');
-        mainApp.style.display = 'none';
-        loginPage.style.display = 'flex';
-        document.getElementById('password').value = '';
-        loginError.style.display = 'none';
-    });
-
-
-    // ==========================================
-    // 📁 2. ระบบตาราง (คลังเอกสาร)
-    // ==========================================
-    const defaultDocs = [
-        { id: 1, date: "11/07/2026", name: "นโยบายการจัดซื้อประจำปี 2026", type: "PDF", detail: "เอกสารแจกแจงข้อกำหนด" },
-        { id: 2, date: "10/07/2026", name: "รายงานการประเมินผู้จำหน่าย Q2", type: "Note", detail: "สรุปจากที่ประชุม" }
-    ];
+    // 📁 ข้อมูลเริ่มต้นต่างๆ
+    const defaultDocs = [{ id: 1, date: "11/07/2026", name: "นโยบายการจัดซื้อประจำปี 2026", type: "PDF", detail: "เอกสารแจกแจงข้อกำหนด" }];
+    const defaultSuppliers = [{ id: 1, name: "เชียงใหม่ อาราบิก้า", contact: "081-999-XXXX", rating: 4.8 }, { id: 2, name: "Doi Chang Coffee", contact: "082-555-XXXX", rating: 4.5 }];
+    const defaultPRs = [{ id: 1, pr: "PR-2608-012", item: "เครื่องบดเมล็ดกาแฟ", dept: "Barista", status: "review", statusText: "รอหัวหน้าอนุมัติ" }];
+    const defaultOrders = [{ id: 1, po: "PO-2607-024", supplier: "เชียงใหม่ อาราบิก้า", item: "เมล็ดคั่วกลาง", status: "pending", statusText: "รอส่งสินค้า" }, { id: 2, po: "PO-2607-023", supplier: "Doi Chang Coffee", item: "เมล็ดพิเศษ", status: "approved", statusText: "อนุมัติแล้ว" }];
+    
     let docs = JSON.parse(localStorage.getItem('coffeeDocs')) || defaultDocs;
+    let suppliers = JSON.parse(localStorage.getItem('coffeeSuppliers')) || defaultSuppliers;
+    let prs = JSON.parse(localStorage.getItem('coffeePRs')) || defaultPRs;
+    let orders = JSON.parse(localStorage.getItem('coffeeOrders')) || defaultOrders;
 
-    function renderDocTable() {
-      const tbody = document.getElementById('docTableBody'); tbody.innerHTML = '';
-      if(docs.length === 0) { tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding: 20px;">ยังไม่มีเอกสารในคลัง</td></tr>`; return; }
-      docs.forEach(d => { tbody.innerHTML += `<tr><td>${d.date}</td><td class="supplier">${d.name} <span class="sub">${d.detail || ''}</span></td><td><span class="pill" style="background:#e8ecef; color:#3b4a54;">${d.type}</span></td><td style="text-align: center;"><button class="btn-delete" onclick="deleteDoc(${d.id})">✖</button></td></tr>`; });
-    }
-    
-    window.deleteDoc = function(id) { 
-        if(confirm('ต้องการลบเอกสารนี้ออกจากคลังหรือไม่?')) { 
-            docs = docs.filter(d => d.id !== id); 
-            localStorage.setItem('coffeeDocs', JSON.stringify(docs)); 
-            renderDocTable(); 
-            toast('ลบเอกสารแล้ว');
-        } 
-    };
-    
-    document.getElementById('toggleDocFormBtn').addEventListener('click', () => document.getElementById('addDocForm').classList.toggle('active'));
-    document.getElementById('addDocForm').addEventListener('submit', e => { 
-        e.preventDefault(); 
-        const todayStr = new Intl.DateTimeFormat('th-TH',{day:'2-digit',month:'2-digit',year:'numeric'}).format(new Date());
-        docs.unshift({ id: Date.now(), date: todayStr, name: document.getElementById('inputDocName').value.trim(), detail: document.getElementById('inputDocDetail').value.trim(), type: document.getElementById('inputDocType').value }); 
-        localStorage.setItem('coffeeDocs', JSON.stringify(docs)); 
-        renderDocTable(); document.getElementById('addDocForm').reset(); document.getElementById('addDocForm').classList.remove('active'); toast('บันทึกเอกสารเรียบร้อย'); 
-    });
-
-    window.saveAiToDocs = function(aiTextSnippet) {
-        const todayStr = new Intl.DateTimeFormat('th-TH',{day:'2-digit',month:'2-digit',year:'numeric'}).format(new Date());
-        docs.unshift({ id: Date.now(), date: todayStr, name: "ข้อความสรุปจาก AI", detail: aiTextSnippet + "...", type: "AI_Summary" });
-        localStorage.setItem('coffeeDocs', JSON.stringify(docs)); renderDocTable(); toast('บันทึกคำตอบ AI ลงคลังเอกสารแล้ว!');
-    };
-
-
-    // ==========================================
-    // 🤖 3. ระบบ AI จำลอง (Mock AI แบบ 100% ตอบได้ชัวร์)
-    // ==========================================
+    // 🤖 ระบบ AI อัจฉริยะ (อ่านข้อมูลตารางแบบ Real-time)
     document.getElementById('chatForm').addEventListener('submit', (e) => {
       e.preventDefault();
       const input = document.getElementById('question');
@@ -388,102 +317,109 @@
       
       const messages = document.getElementById('messages');
       messages.insertAdjacentHTML('beforeend', `<div class="message user">${q}</div>`);
-      input.value = '';
-      messages.scrollTop = messages.scrollHeight;
+      input.value = ''; messages.scrollTop = messages.scrollHeight;
       
       const loadingId = 'loading-' + Date.now();
-      messages.insertAdjacentHTML('beforeend', `<div class="message bot loading-ai" id="${loadingId}">กำลังวิเคราะห์ข้อมูลจัดซื้อ...</div>`);
+      messages.insertAdjacentHTML('beforeend', `<div class="message bot loading-ai" id="${loadingId}">กำลังดึงข้อมูลล่าสุดจากฐานข้อมูล...</div>`);
       messages.scrollTop = messages.scrollHeight;
 
       setTimeout(() => {
           document.getElementById(loadingId).remove();
           
-          let reply = "ขออภัยค่ะ ฉันยังไม่ค่อยเข้าใจ ลองถามเกี่ยวกับ 'การจัดซื้อ', 'ผู้จำหน่าย', หรือ 'เมล็ดกาแฟ' ดูนะคะ";
+          // ⭐️ พระเอกอยู่ตรงนี้: ดึงข้อมูลจริงล่าสุด ณ วินาทีนั้น มาใช้วิเคราะห์!
+          const currentSuppliers = JSON.parse(localStorage.getItem('coffeeSuppliers')) || defaultSuppliers;
+          const currentOrders = JSON.parse(localStorage.getItem('coffeeOrders')) || defaultOrders;
+          const currentPRs = JSON.parse(localStorage.getItem('coffeePRs')) || defaultPRs;
           
-          if(q.includes("กาแฟ") || q.includes("เมล็ด")) {
-              reply = "ตอนนี้เรามีเมล็ดกาแฟยอดฮิตคือ 'คั่วกลาง' จากเชียงใหม่ อาราบิก้า และ 'เมล็ดพิเศษ' จาก Doi Chang ค่ะ สต็อกยังอยู่ในระดับปกติค่ะ";
-          } else if(q.includes("ผู้จำหน่าย") || q.includes("ใครดี") || q.includes("คะแนน")) {
-              reply = "จากการประเมินล่าสุด 'เชียงใหม่ อาราบิก้า' มีคะแนนสูงสุดที่ 4.8 ดาวค่ะ แนะนำให้เปิดใบสั่งซื้อ (PO) จากเจ้านี้เพื่อความรวดเร็วและได้ของคุณภาพค่ะ";
-          } else if(q.includes("สรุป") || q.includes("ยอด") || q.includes("รายงาน")) {
-              reply = "เดือนนี้มีใบสั่งซื้อเปิดอยู่ 14 รายการ มูลค่ารวม 482,000 บาท การจัดซื้อเป็นไปตามแผน 85% และมีคำขอ PR รอตรวจสอบอีก 8 รายการค่ะ";
+          let reply = "ขออภัยค่ะ ฉันยังไม่ค่อยเข้าใจ ลองถามคำว่า 'ผู้จำหน่ายทั้งหมด', 'สรุปใบสั่งซื้อ', หรือ 'มีคำขอ PR ไหม' ดูนะคะ";
+          
+          if(q.includes("ผู้จำหน่าย") || q.includes("บริษัท") || q.includes("ใครบ้าง") || q.includes("ซัพพลายเออร์")) {
+              if(currentSuppliers.length === 0) {
+                  reply = "ตอนนี้ยังไม่มีข้อมูลผู้จำหน่ายในระบบเลยค่ะ คุณสามารถไปเพิ่มได้ที่เมนู 'ผู้จำหน่าย' ทางด้านซ้ายนะคะ";
+              } else {
+                  const supNames = currentSuppliers.map(s => `• <b>${s.name}</b> (เรตติ้ง: ⭐${s.rating})`).join("<br>");
+                  reply = `ข้อมูลล่าสุด! ตอนนี้เรามีผู้จำหน่ายในระบบทั้งหมด <b>${currentSuppliers.length} เจ้า</b> ดังนี้ค่ะ:<br>${supNames}`;
+              }
+          } else if(q.includes("สรุป") || q.includes("ยอด") || q.includes("อัปเดต") || q.includes("ใบสั่งซื้อ") || q.includes("PO") || q.includes("เอกสาร")) {
+              reply = `📊 สรุปข้อมูลล่าสุด ณ ปัจจุบัน:<br>- มีใบสั่งซื้อ (PO) ในระบบรวม: <b>${currentOrders.length} รายการ</b><br>- มีคำขอจัดซื้อ (PR) รอตรวจสอบ: <b>${currentPRs.length} รายการ</b><br>- มีเอกสารจัดเก็บในคลัง: <b>${docs.length} ไฟล์</b>ค่ะ`;
+          } else if(q.includes("กาแฟ") || q.includes("เมล็ด") || q.includes("สินค้า")) {
+              if(currentOrders.length === 0) {
+                  reply = "ยังไม่มีประวัติการสั่งซื้อสินค้าในระบบเลยค่ะ ลองไปเปิด PO ใบแรกดูนะคะ";
+              } else {
+                  const allItems = currentOrders.map(o => o.item).join(", ");
+                  reply = `จากประวัติใบสั่งซื้อที่เปิดอยู่ตอนนี้ เรากำลังสั่งซื้อรายการดังนี้ค่ะ: <b>${allItems}</b>`;
+              }
           } else if(q.includes("สวัสดี")) {
-              reply = "สวัสดีค่ะ! วันนี้มีรายการคำขอ PR รอให้คุณตรวจสอบอยู่นะคะ ให้ฉันช่วยเปรียบเทียบราคาผู้จำหน่ายให้ไหมคะ?";
+              reply = "สวัสดีค่ะคุณพิชญา! ฉันเชื่อมต่อกับระบบฐานข้อมูลเรียบร้อยแล้วค่ะ อยากให้ฉันช่วยสรุปข้อมูลผู้จำหน่ายล่าสุดให้ไหมคะ?";
           } else if(q.includes("ขอบคุณ")) {
-              reply = "ยินดีเสมอค่ะ! หากต้องการให้ช่วยเปิดใบสั่งซื้อ หรือสรุปเอกสารเพิ่มเติม แจ้ง Smart Coffee ได้ตลอดเลยนะคะ ☕";
+              reply = "ยินดีเสมอค่ะ! หากมีการเพิ่มผู้จำหน่ายใหม่หรือเปิด PO ใหม่ ถามฉันเพื่อสรุปข้อมูลได้ตลอดเวลาเลยนะคะ ☕";
           }
 
-          const snippet = reply.substring(0, 30).replace(/["']/g, ""); 
+          const snippet = reply.replace(/<br>/g, " ").replace(/<[^>]*>?/gm, '').substring(0, 35); 
           
           messages.insertAdjacentHTML('beforeend', `
             <div class="message bot">
                 ${reply}
                 <div class="source" style="margin-top: 10px; border-top: 1px dashed #d9cbbf; padding-top: 5px; display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
-                    Smart Coffee AI (Offline Mode)
+                    AI (อัปเดตข้อมูล Real-time สำเร็จ)
                     <button onclick="saveAiToDocs('${snippet}')" style="margin-left:auto; padding:4px 8px; font-size:11px; cursor:pointer; background:var(--sage); color:white; border:none; border-radius:4px;">
                         💾 บันทึกลงคลังเอกสาร
                     </button>
                 </div>
             </div>`);
           messages.scrollTop = messages.scrollHeight;
-      }, 1500); 
+      }, 1000); 
     });
 
 
-    // ==========================================
-    // 🟢 4. ระบบ Sidebar และ Routing
-    // ==========================================
-    const defaultNavItems = [
-      { id: 1, cat: 'Overview', ic: '▦', n: 'แดชบอร์ด' }, { id: 3, cat: 'Procurement', ic: '◫', n: 'คำขอจัดซื้อ' },
-      { id: 4, cat: 'Procurement', ic: '▤', n: 'ใบสั่งซื้อ' }, { id: 5, cat: 'Procurement', ic: '♙', n: 'ผู้จำหน่าย' }, { id: 7, cat: 'Workspace', ic: '▱', n: 'คลังเอกสาร' }
-    ];
+    // 🟢 ระบบตาราง (คลังเอกสาร)
+    function renderDocTable() {
+      const tbody = document.getElementById('docTableBody'); tbody.innerHTML = '';
+      if(docs.length === 0) { tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding: 20px;">ยังไม่มีเอกสารในคลัง</td></tr>`; return; }
+      docs.forEach(d => { tbody.innerHTML += `<tr><td>${d.date}</td><td class="supplier">${d.name} <span class="sub">${d.detail || ''}</span></td><td><span class="pill" style="background:#e8ecef; color:#3b4a54;">${d.type}</span></td><td style="text-align: center;"><button class="btn-delete" onclick="deleteDoc(${d.id})">✖</button></td></tr>`; });
+    }
+    window.deleteDoc = function(id) { if(confirm('ต้องการลบเอกสารนี้ออกจากคลังหรือไม่?')) { docs = docs.filter(d => d.id !== id); localStorage.setItem('coffeeDocs', JSON.stringify(docs)); renderDocTable(); toast('ลบเอกสารแล้ว'); } };
+    document.getElementById('toggleDocFormBtn').addEventListener('click', () => document.getElementById('addDocForm').classList.toggle('active'));
+    document.getElementById('addDocForm').addEventListener('submit', e => { 
+        e.preventDefault(); 
+        const todayStr = new Intl.DateTimeFormat('th-TH',{day:'2-digit',month:'2-digit',year:'numeric'}).format(new Date());
+        docs.unshift({ id: Date.now(), date: todayStr, name: document.getElementById('inputDocName').value.trim(), detail: document.getElementById('inputDocDetail').value.trim(), type: document.getElementById('inputDocType').value }); 
+        localStorage.setItem('coffeeDocs', JSON.stringify(docs)); renderDocTable(); document.getElementById('addDocForm').reset(); document.getElementById('addDocForm').classList.remove('active'); toast('บันทึกเอกสารเรียบร้อย'); 
+    });
+    window.saveAiToDocs = function(aiTextSnippet) {
+        const todayStr = new Intl.DateTimeFormat('th-TH',{day:'2-digit',month:'2-digit',year:'numeric'}).format(new Date());
+        docs.unshift({ id: Date.now(), date: todayStr, name: "ข้อความสรุปจาก AI", detail: aiTextSnippet + "...", type: "AI_Summary" });
+        localStorage.setItem('coffeeDocs', JSON.stringify(docs)); renderDocTable(); toast('บันทึกคำตอบ AI ลงคลังเอกสารแล้ว!');
+    };
+
+
+    // 🟢 ระบบ Sidebar
+    const defaultNavItems = [{ id: 1, cat: 'Overview', ic: '▦', n: 'แดชบอร์ด' }, { id: 3, cat: 'Procurement', ic: '◫', n: 'คำขอจัดซื้อ' }, { id: 4, cat: 'Procurement', ic: '▤', n: 'ใบสั่งซื้อ' }, { id: 5, cat: 'Procurement', ic: '♙', n: 'ผู้จำหน่าย' }, { id: 7, cat: 'Workspace', ic: '▱', n: 'คลังเอกสาร' }];
     let navItems = JSON.parse(localStorage.getItem('smartCoffeeNav')) || defaultNavItems;
     let activeMenuId = 1;
-
     function renderSidebar() {
-      const nav = document.getElementById('dynamicNav'); let html = '';
-      const categories = [...new Set(navItems.map(i => i.cat))]; 
+      const nav = document.getElementById('dynamicNav'); let html = ''; const categories = [...new Set(navItems.map(i => i.cat))]; 
       categories.forEach(c => {
         const items = navItems.filter(i => i.cat === c);
         if(items.length > 0) {
             html += `<div class="nav-title">${c}</div>`;
-            items.forEach(item => {
-              const isActive = item.id === activeMenuId ? 'active' : '';
-              html += `<div class="nav-item-wrapper"><button class="nav-item ${isActive}" onclick="navigatePage(${item.id}, '${item.n}')"><span class="ico">${item.ic}</span>${item.n}</button><button class="del-menu" onclick="deleteMenu(${item.id})">✖</button></div>`;
-            });
+            items.forEach(item => { const isActive = item.id === activeMenuId ? 'active' : ''; html += `<div class="nav-item-wrapper"><button class="nav-item ${isActive}" onclick="navigatePage(${item.id}, '${item.n}')"><span class="ico">${item.ic}</span>${item.n}</button><button class="del-menu" onclick="deleteMenu(${item.id})">✖</button></div>`; });
         }
-      });
-      nav.innerHTML = html;
+      }); nav.innerHTML = html;
     }
-
     window.navigatePage = function(id, name) {
-      activeMenuId = id; renderSidebar();
-      document.getElementById('pageTitle').textContent = name; document.getElementById('pageDesc').textContent = 'ระบบจัดการข้อมูล ' + name;
-      document.querySelectorAll('.content-view').forEach(el => el.classList.remove('active'));
-      
+      activeMenuId = id; renderSidebar(); document.getElementById('pageTitle').textContent = name; document.getElementById('pageDesc').textContent = 'ระบบจัดการข้อมูล ' + name; document.querySelectorAll('.content-view').forEach(el => el.classList.remove('active'));
       if (name === 'แดชบอร์ด') { document.getElementById('page-dashboard').classList.add('active'); document.getElementById('pageDesc').textContent = 'ภาพรวมงานจัดซื้อเมล็ดกาแฟของคุณ'; } 
-      else if (name === 'คำขอจัดซื้อ') { document.getElementById('page-pr').classList.add('active'); }
-      else if (name === 'ใบสั่งซื้อ') { document.getElementById('page-po').classList.add('active'); }
-      else if (name === 'ผู้จำหน่าย') { document.getElementById('page-supplier').classList.add('active'); } 
-      else if (name === 'คลังเอกสาร') { document.getElementById('page-docs').classList.add('active'); } 
+      else if (name === 'คำขอจัดซื้อ') { document.getElementById('page-pr').classList.add('active'); } else if (name === 'ใบสั่งซื้อ') { document.getElementById('page-po').classList.add('active'); }
+      else if (name === 'ผู้จำหน่าย') { document.getElementById('page-supplier').classList.add('active'); } else if (name === 'คลังเอกสาร') { document.getElementById('page-docs').classList.add('active'); } 
       else { document.getElementById('page-other').classList.add('active'); document.getElementById('otherPageHeading').textContent = 'ส่วนแสดงผลข้อมูล: ' + name; }
     };
-
-    window.deleteMenu = function(id) {
-      if(confirm('ต้องการลบเมนูนี้ออกใช่หรือไม่?')) {
-        navItems = navItems.filter(item => item.id !== id); localStorage.setItem('smartCoffeeNav', JSON.stringify(navItems));
-        if(activeMenuId === id) navigatePage(1, 'แดชบอร์ด'); else renderSidebar();
-      }
-    };
-
+    window.deleteMenu = function(id) { if(confirm('ต้องการลบเมนูนี้ออกใช่หรือไม่?')) { navItems = navItems.filter(item => item.id !== id); localStorage.setItem('smartCoffeeNav', JSON.stringify(navItems)); if(activeMenuId === id) navigatePage(1, 'แดชบอร์ด'); else renderSidebar(); } };
     document.getElementById('toggleEditModeBtn').addEventListener('click', () => { document.getElementById('dynamicNav').classList.toggle('editing'); document.getElementById('newMenuForm').classList.toggle('active'); });
     document.getElementById('newMenuForm').addEventListener('submit', (e) => { e.preventDefault(); navItems.push({ id: Date.now(), ic: document.getElementById('newMenuIcon').value.trim(), n: document.getElementById('newMenuName').value.trim(), cat: document.getElementById('newMenuCategory').value }); localStorage.setItem('smartCoffeeNav', JSON.stringify(navItems)); renderSidebar(); document.getElementById('newMenuForm').reset(); toast('เพิ่มเมนูใหม่สำเร็จ!'); });
 
 
-    // ==========================================
-    // 🟢 5. ระบบตาราง (ผู้จำหน่าย)
-    // ==========================================
-    const defaultSuppliers = [{ id: 1, name: "เชียงใหม่ อาราบิก้า", contact: "081-999-XXXX", rating: 4.8 }, { id: 2, name: "Doi Chang Coffee", contact: "082-555-XXXX", rating: 4.5 }];
-    let suppliers = JSON.parse(localStorage.getItem('coffeeSuppliers')) || defaultSuppliers;
+    // 🟢 ระบบตารางอื่นๆ
     function renderSupplierTable() {
       const tbody = document.getElementById('supplierTableBody'); tbody.innerHTML = '';
       if(suppliers.length === 0) { tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding: 20px;">ไม่มีข้อมูลผู้จำหน่าย</td></tr>`; return; }
@@ -493,11 +429,6 @@
     document.getElementById('toggleSupplierFormBtn').addEventListener('click', () => document.getElementById('addSupplierForm').classList.toggle('active'));
     document.getElementById('addSupplierForm').addEventListener('submit', e => { e.preventDefault(); suppliers.unshift({ id: Date.now(), name: document.getElementById('inputSupName').value.trim(), contact: document.getElementById('inputSupContact').value.trim(), rating: document.getElementById('inputSupRating').value.trim() }); localStorage.setItem('coffeeSuppliers', JSON.stringify(suppliers)); renderSupplierTable(); document.getElementById('addSupplierForm').reset(); document.getElementById('addSupplierForm').classList.remove('active'); toast('เพิ่มผู้จำหน่ายแล้ว'); });
 
-    // ==========================================
-    // 🟢 6. ระบบตาราง (คำขอจัดซื้อ - PR)
-    // ==========================================
-    const defaultPRs = [{ id: 1, pr: "PR-2608-012", item: "เครื่องบดเมล็ดกาแฟ", dept: "Barista", status: "review", statusText: "รอหัวหน้าอนุมัติ" }];
-    let prs = JSON.parse(localStorage.getItem('coffeePRs')) || defaultPRs;
     function renderPrTable() {
       const tbody = document.getElementById('prTableBody'); tbody.innerHTML = '';
       if(prs.length === 0) { tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding: 20px;">ไม่มีข้อมูลคำขอ</td></tr>`; return; }
@@ -506,40 +437,22 @@
     window.deletePR = function(id) { if(confirm('ต้องการลบคำขอจัดซื้อนี้?')) { prs = prs.filter(p => p.id !== id); localStorage.setItem('coffeePRs', JSON.stringify(prs)); renderPrTable(); toast('ลบ PR แล้ว');} };
     document.getElementById('togglePrFormBtn').addEventListener('click', () => document.getElementById('addPrForm').classList.toggle('active'));
     document.getElementById('addPrForm').addEventListener('submit', e => { e.preventDefault(); prs.unshift({ id: Date.now(), pr: document.getElementById('inputPrNo').value.trim(), item: document.getElementById('inputPrItem').value.trim(), dept: document.getElementById('inputPrDept').value.trim(), status: "review", statusText: "รอตรวจสอบ" }); localStorage.setItem('coffeePRs', JSON.stringify(prs)); renderPrTable(); document.getElementById('addPrForm').reset(); document.getElementById('addPrForm').classList.remove('active'); toast('สร้าง PR เรียบร้อย'); });
-
-    // ==========================================
-    // 🟢 7. ระบบตาราง (ใบสั่งซื้อ - PO)
-    // ==========================================
-    const defaultOrders = [{ id: 1, po: "PO-2607-024", supplier: "เชียงใหม่ อาราบิก้า", item: "เมล็ดคั่วกลาง", status: "pending", statusText: "รอส่งสินค้า" }, { id: 2, po: "PO-2607-023", supplier: "Doi Chang Coffee", item: "เมล็ดพิเศษ", status: "approved", statusText: "อนุมัติแล้ว" }];
-    let orders = JSON.parse(localStorage.getItem('coffeeOrders')) || defaultOrders;
     
     function renderPoTables() {
-      const dbBody = document.getElementById('dashboardOrderTableBody');
-      const poBody = document.getElementById('poPageTableBody');
-      dbBody.innerHTML = ''; poBody.innerHTML = '';
-      
-      document.getElementById('metricPoCount').textContent = orders.length;
-
-      if(orders.length === 0) { 
-          const empty = `<tr><td colspan="5" style="text-align:center; padding: 20px;">ไม่มีข้อมูลคำสั่งซื้อ</td></tr>`;
-          dbBody.innerHTML = empty; poBody.innerHTML = empty; return; 
-      }
-      
+      const dbBody = document.getElementById('dashboardOrderTableBody'); const poBody = document.getElementById('poPageTableBody');
+      dbBody.innerHTML = ''; poBody.innerHTML = ''; document.getElementById('metricPoCount').textContent = orders.length;
+      if(orders.length === 0) { const empty = `<tr><td colspan="5" style="text-align:center; padding: 20px;">ไม่มีข้อมูลคำสั่งซื้อ</td></tr>`; dbBody.innerHTML = empty; poBody.innerHTML = empty; return; }
       orders.forEach((order, index) => { 
         const rowHTML = `<tr><td>${order.po}</td><td class="supplier">${order.supplier}</td><td>${order.item}</td><td><span class="pill ${order.status}">${order.statusText}</span></td>`;
         if(index < 3) { dbBody.innerHTML += rowHTML + `</tr>`; }
         poBody.innerHTML += rowHTML + `<td style="text-align: center;"><button class="btn-delete" onclick="deleteOrder(${order.id})">✖</button></td></tr>`; 
       });
     }
-
     window.deleteOrder = function(id) { if(confirm('ต้องการลบใบสั่งซื้อนี้?')) { orders = orders.filter(o => o.id !== id); localStorage.setItem('coffeeOrders', JSON.stringify(orders)); renderPoTables(); toast('ลบ PO แล้ว');} };
     document.getElementById('togglePoFormBtn').addEventListener('click', () => document.getElementById('addPoForm').classList.toggle('active'));
     document.getElementById('addPoForm').addEventListener('submit', e => { 
-        e.preventDefault(); 
-        const statusVal = document.getElementById('inputPoStatus').value;
-        const statusText = document.getElementById('inputPoStatus').options[document.getElementById('inputPoStatus').selectedIndex].text;
-        orders.unshift({ id: Date.now(), po: document.getElementById('inputPoNo').value.trim(), supplier: document.getElementById('inputPoSupplier').value.trim(), item: document.getElementById('inputPoItem').value.trim(), status: statusVal, statusText: statusText }); 
-        localStorage.setItem('coffeeOrders', JSON.stringify(orders)); 
+        e.preventDefault(); const statusVal = document.getElementById('inputPoStatus').value; const statusText = document.getElementById('inputPoStatus').options[document.getElementById('inputPoStatus').selectedIndex].text;
+        orders.unshift({ id: Date.now(), po: document.getElementById('inputPoNo').value.trim(), supplier: document.getElementById('inputPoSupplier').value.trim(), item: document.getElementById('inputPoItem').value.trim(), status: statusVal, statusText: statusText }); localStorage.setItem('coffeeOrders', JSON.stringify(orders)); 
         renderPoTables(); document.getElementById('addPoForm').reset(); document.getElementById('addPoForm').classList.remove('active'); toast('สร้างใบสั่งซื้อเรียบร้อย'); 
     });
 
