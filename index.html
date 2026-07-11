@@ -20,7 +20,7 @@
     .login-form button:hover { background: #b85f29; }
     .error-msg { color: #d87436; font-size: 12px; display: none; margin-top: -5px; }
 
-    /* 📌 โครงสร้างแอปหลัก (จะซ่อนไว้ก่อนจนกว่าจะล็อกอิน) */
+    /* 📌 โครงสร้างแอปหลัก */
     .app { min-height:100vh; display:none; grid-template-columns:248px 1fr; }
     
     /* เมนูด้านข้าง (Sidebar) */
@@ -28,7 +28,6 @@
     .brand { display:flex; gap:11px; align-items:center; padding:0 10px; font-weight:750; line-height:1.1; }
     .bean { width:35px; height:35px; border-radius:50% 48% 52% 48%; background:#df7d40; position:relative; transform:rotate(-25deg); } .bean:after { content:""; position:absolute; inset:4px 15px 4px 15px; border-left:2px solid #6a3825; border-radius:50%; }
     .brand small { display:block; color:#bcaea6; font-size:11px; font-weight:500; margin-top:4px; letter-spacing:.04em; }
-    
     nav { display:grid; gap:5px; } .nav-title { color:#a79890; text-transform:uppercase; font-size:10px; letter-spacing:.12em; margin:8px 11px; }
     .nav-item-wrapper { display: flex; align-items: center; justify-content: space-between; gap: 5px; }
     .nav-item { width: 100%; color:#d6c8c0; border:0; background:transparent; text-align:left; border-radius:9px; padding:11px; cursor:pointer; font-size:14px; display:flex; align-items:center; gap:11px; transition: 0.2s; }
@@ -36,20 +35,15 @@
     .del-menu { background:none; border:none; color:#ff6b6b; cursor:pointer; font-size:14px; display:none; padding: 5px; } 
     .editing .del-menu { display:block; } .editing .nav-item { width: 85%; }
     
-    .menu-edit-form { display:none; flex-direction:column; gap:8px; margin-top:10px; padding:15px; background:#3f2e26; border-radius:8px; border:1px solid #594137; }
-    .menu-edit-form.active { display:flex; }
+    .menu-edit-form { display:none; flex-direction:column; gap:8px; margin-top:10px; padding:15px; background:#3f2e26; border-radius:8px; border:1px solid #594137; } .menu-edit-form.active { display:flex; }
     .menu-edit-form input, .menu-edit-form select { padding:8px; border-radius:6px; border:1px solid #594137; background:#281d19; color:white; font-size:12px; outline:none; }
     .menu-edit-form button { background:var(--orange); color:white; border:none; padding:8px; border-radius:6px; cursor:pointer; font-weight:bold; font-size:12px; }
-    .btn-toggle-edit { background:none; border:1px dashed #594137; color:#bcaea6; padding:8px; border-radius:8px; cursor:pointer; font-size:12px; transition:0.2s; margin-top:10px; width: 100%; }
-    .btn-toggle-edit:hover { background:#3f2e26; color:white; }
+    .btn-toggle-edit { background:none; border:1px dashed #594137; color:#bcaea6; padding:8px; border-radius:8px; cursor:pointer; font-size:12px; transition:0.2s; margin-top:10px; width: 100%; } .btn-toggle-edit:hover { background:#3f2e26; color:white; }
 
     .profile { margin-top:auto; border-top:1px solid #594137; padding:19px 10px 0; display:flex; gap:10px; align-items:center; font-size:13px; } .avatar { width:31px; height:31px; border-radius:50%; display:grid; place-items:center; background:#8eaa95; color:#163328; font-weight:800; }
-    
-    /* ส่วนปุ่ม Logout */
-    .btn-logout { background: #1f1511; color: #ff6b6b; border: 1px solid #4a332a; border-radius: 8px; padding: 10px; cursor: pointer; font-size: 12px; font-weight: bold; margin-top: 15px; transition: 0.2s; }
-    .btn-logout:hover { background: #ff6b6b; color: white; }
+    .btn-logout { background: #1f1511; color: #ff6b6b; border: 1px solid #4a332a; border-radius: 8px; padding: 10px; cursor: pointer; font-size: 12px; font-weight: bold; margin-top: 15px; transition: 0.2s; } .btn-logout:hover { background: #ff6b6b; color: white; }
 
-    /* 📄 ส่วนเนื้อหาหลัก (Main Content) */
+    /* 📄 ส่วนเนื้อหาหลัก */
     main { padding:29px 36px 36px; max-width:1500px; width:100%; margin:auto; } 
     header { display:flex; justify-content:space-between; align-items:center; margin-bottom:27px; border-bottom: 1px solid var(--line); padding-bottom: 20px; }
     h1 { font-size:27px; margin:0; letter-spacing:-.04em; } header p { margin:5px 0 0; color:var(--muted); font-size:14px; } .date { color:var(--muted); font-size:13px; }
@@ -66,11 +60,11 @@
     .metrics { display:grid; grid-template-columns:repeat(4,1fr); gap:15px; margin:20px 0; } .metric { padding:18px; } .metric label { display:block; color:var(--muted); font-size:12px; margin-bottom:10px; } .metric strong { font-size:24px; letter-spacing:-.04em; } .metric .trend { color:var(--sage); font-size:11px; margin-left:5px; }
     .grid { display:grid; grid-template-columns:1.12fr .88fr; gap:20px; } .section { padding:23px; } .section h3 { margin:0; font-size:16px; } .section-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; } .link { color:var(--coffee); border:0; background:none; font-size:12px; font-weight:700; cursor:pointer; transition: 0.2s; } .link:hover { color: var(--orange); }
     table { border-collapse:collapse; width:100%; font-size:13px; } th { text-align:left; color:var(--muted); font-size:11px; font-weight:600; padding:10px 8px; border-bottom:1px solid var(--line); } td { padding:13px 8px; border-bottom:1px solid #f1e9e2; } .supplier { font-weight:700; } .sub { display:block; color:var(--muted); font-size:11px; margin-top:3px; } .pill { border-radius:20px; padding:4px 8px; font-weight:650; font-size:10px; white-space:nowrap; } .pending { color:#9b4f1f; background:#fff0df; } .approved { color:#34705b; background:#e7f3ed; } .review { color:#755c1f; background:#faf3d8; }
+    
     .add-form { display: none; grid-template-columns: 1fr 1fr 1fr auto; gap: 10px; background: #f5eee7; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid var(--line); } .add-form.active { display: grid; }
-    .add-form input { padding: 8px 12px; border: 1px solid #d9cbbf; border-radius: 6px; font-size: 13px; outline-color: var(--orange); }
+    .add-form input, .add-form select { padding: 8px 12px; border: 1px solid #d9cbbf; border-radius: 6px; font-size: 13px; outline-color: var(--orange); }
     .btn-delete { color: #d87436; background: none; border: none; cursor: pointer; font-size: 14px; font-weight: bold; } .btn-delete:hover { color: red; }
     
-    /* สไตล์ AI Chat ปรับปรุงให้รองรับข้อความยาวๆ */
     .chat { display:flex; flex-direction:column; min-height:400px; } .messages { flex:1; padding:15px 0 5px; display:grid; gap:12px; overflow-y: auto; max-height: 300px; align-content: start; } .message { max-width:90%; padding:10px 12px; border-radius:10px; line-height:1.5; font-size:13px; word-wrap: break-word; } .bot { background:#f5eee7; border-top-left-radius:2px; } .user { margin-left:auto; background:#6c4130; color:white; border-top-right-radius:2px; } .source { color:#a05b34; font-size:11px; margin-top:5px; font-weight:650; } .loading-ai { font-style: italic; color: var(--muted); }
     .chat-form { display:flex; border-top:1px solid var(--line); padding-top:15px; gap:8px; } input { min-width:0; flex:1; padding:10px 12px; border:1px solid #d9cbbf; border-radius:8px; outline-color:#b86b40; font:inherit; font-size:12px; } .send { background:var(--orange); color:white; border:0; border-radius:8px; padding:0 14px; cursor:pointer; font-weight:700; transition: 0.2s; } .send:hover { background: #b85f29; }
     
@@ -81,9 +75,7 @@
 </head>
 <body>
   
-  <!-- ========================================== -->
-  <!-- 🔐 โซนหน้า Login (แสดงผลเป็นหน้าแรก) -->
-  <!-- ========================================== -->
+  <!-- 🔐 โซนหน้า Login -->
   <div id="login-page">
     <div class="login-box">
         <h2>Smart Coffee</h2>
@@ -97,9 +89,7 @@
     </div>
   </div>
 
-  <!-- ========================================== -->
-  <!-- โซนแอปหลัก (ซ่อนไว้ก่อนจนกว่าจะล็อกอินผ่าน) -->
-  <!-- ========================================== -->
+  <!-- โซนแอปหลัก -->
   <div class="app" id="main-app">
     
     <aside>
@@ -120,7 +110,7 @@
 
       <div class="profile">
         <div class="avatar">PK</div>
-        <div><b>พิชญา กาแฟดี</b><small style="display:block;color:#bcaea6;margin-top:3px">Procurement Manager</small></div>
+        <div><b>พรรณวิภา กาแฟดี</b><small style="display:block;color:#bcaea6;margin-top:3px">Procurement Manager</small></div>
       </div>
       <button class="btn-logout" id="logoutBtn">🚪 ออกจากระบบ</button>
     </aside>
@@ -134,7 +124,9 @@
         <div class="date" id="today"></div>
       </header>
 
-      <!-- โซนหน้าแดชบอร์ด -->
+      <!-- ========================================== -->
+      <!-- 1. หน้าแดชบอร์ด -->
+      <!-- ========================================== -->
       <div id="page-dashboard" class="content-view active">
         <div class="top">
           <section class="card hero"><div class="eyebrow">AI Procurement Insight</div><h2>ตัดสินใจจัดซื้ออย่างมั่นใจ ด้วยข้อมูลที่ครบถ้วน</h2><p>ให้ AI ช่วยเปรียบเทียบผู้จำหน่าย ค้นหานโยบาย และสรุปเอกสารจัดซื้อของคุณได้ทันที</p><button id="askAi">เริ่มถามผู้ช่วย AI →</button></section>
@@ -143,7 +135,7 @@
 
         <section class="metrics">
           <div class="card metric"><label>คำขอรออนุมัติ</label><strong>08</strong><span class="trend">↓ 2 จากสัปดาห์ก่อน</span></div>
-          <div class="card metric"><label>ใบสั่งซื้อที่เปิดอยู่</label><strong>14</strong><span class="trend">↑ 4 รายการ</span></div>
+          <div class="card metric"><label>ใบสั่งซื้อที่เปิดอยู่</label><strong id="metricPoCount">14</strong><span class="trend">อัปเดตล่าสุด</span></div>
           <div class="card metric"><label>มูลค่าจัดซื้อเดือนนี้</label><strong>฿482K</strong><span class="trend">↑ 12.5%</span></div>
           <div class="card metric"><label>คะแนนผู้จำหน่ายเฉลี่ย</label><strong>4.6</strong><span class="trend">/ 5.0</span></div>
         </section>
@@ -151,22 +143,15 @@
         <div class="grid">
           <section class="card section">
             <div class="section-head">
-              <h3>คำสั่งซื้อล่าสุด</h3>
-              <div><button class="link" id="toggleFormBtn" style="margin-right: 15px; font-size: 13px;">+ เพิ่มคำสั่งซื้อ</button></div>
+              <h3>คำสั่งซื้อล่าสุด (PO)</h3>
+              <div><button class="link" onclick="navigatePage(4, 'ใบสั่งซื้อ')">ดูทั้งหมด →</button></div>
             </div>
-            <form class="add-form" id="addOrderForm">
-              <input id="inputPo" placeholder="เลขที่ (เช่น PO-2607-xxx)" required>
-              <input id="inputSupplierOrder" placeholder="ชื่อผู้จำหน่าย" required>
-              <input id="inputItem" placeholder="รายการสินค้า" required>
-              <button type="submit" class="send">บันทึกข้อมูล</button>
-            </form>
             <table>
-              <thead><tr><th>เลขที่</th><th>ผู้จำหน่าย</th><th>รายการ</th><th>สถานะ</th><th style="text-align: center;">จัดการ</th></tr></thead>
-              <tbody id="orderTableBody"></tbody>
+              <thead><tr><th>เลขที่</th><th>ผู้จำหน่าย</th><th>รายการ</th><th>สถานะ</th></tr></thead>
+              <tbody id="dashboardOrderTableBody"></tbody>
             </table>
           </section>
 
-          <!-- 🤖 โซนช่องแชท AI -->
           <section class="card section chat" id="chat">
             <div class="section-head"><h3>✦ ผู้ช่วยจัดซื้อ AI (Google API)</h3><span class="pill approved" style="background:#e8f0fe; color:#1a73e8;">พร้อมใช้งาน</span></div>
             <div class="messages" id="messages">
@@ -180,7 +165,58 @@
         </div>
       </div>
 
-      <!-- โซนหน้าผู้จำหน่าย -->
+      <!-- ========================================== -->
+      <!-- 2. หน้าคำขอจัดซื้อ (PR) -->
+      <!-- ========================================== -->
+      <div id="page-pr" class="content-view">
+        <section class="card section">
+            <div class="section-head">
+              <h3>รายการคำขอจัดซื้อทั้งหมด (Purchase Requisitions)</h3>
+              <div><button class="link" id="togglePrFormBtn" style="margin-right: 15px; font-size: 13px;">+ สร้างคำขอ PR</button></div>
+            </div>
+            <form class="add-form" id="addPrForm">
+              <input id="inputPrNo" placeholder="เลขที่ PR (เช่น PR-2608-001)" required>
+              <input id="inputPrItem" placeholder="รายการที่ต้องการ" required>
+              <input id="inputPrDept" placeholder="แผนกที่ร้องขอ" required>
+              <button type="submit" class="send">บันทึกคำขอ</button>
+            </form>
+            <table>
+              <thead><tr><th>เลขที่ PR</th><th>รายการสินค้า</th><th>แผนกที่ร้องขอ</th><th>สถานะการอนุมัติ</th><th style="text-align: center;">จัดการ</th></tr></thead>
+              <tbody id="prTableBody"></tbody>
+            </table>
+        </section>
+      </div>
+
+      <!-- ========================================== -->
+      <!-- 3. หน้าใบสั่งซื้อ (PO) -->
+      <!-- ========================================== -->
+      <div id="page-po" class="content-view">
+        <section class="card section">
+            <div class="section-head">
+              <h3>รายการใบสั่งซื้อทั้งหมด (Purchase Orders)</h3>
+              <div><button class="link" id="togglePoFormBtn" style="margin-right: 15px; font-size: 13px;">+ สร้างใบสั่งซื้อ PO</button></div>
+            </div>
+            <form class="add-form" id="addPoForm">
+              <input id="inputPoNo" placeholder="เลขที่ PO (เช่น PO-2607-xxx)" required>
+              <input id="inputPoSupplier" placeholder="ชื่อผู้จำหน่าย" required>
+              <input id="inputPoItem" placeholder="รายการสินค้า" required>
+              <select id="inputPoStatus">
+                  <option value="pending">รอส่งสินค้า</option>
+                  <option value="approved">อนุมัติแล้ว</option>
+                  <option value="review">ตรวจรับสินค้า</option>
+              </select>
+              <button type="submit" class="send">บันทึกข้อมูล</button>
+            </form>
+            <table>
+              <thead><tr><th>เลขที่ PO</th><th>ผู้จำหน่าย</th><th>รายการ</th><th>สถานะ</th><th style="text-align: center;">จัดการ</th></tr></thead>
+              <tbody id="poPageTableBody"></tbody>
+            </table>
+        </section>
+      </div>
+
+      <!-- ========================================== -->
+      <!-- 4. หน้าผู้จำหน่าย (Suppliers) -->
+      <!-- ========================================== -->
       <div id="page-supplier" class="content-view">
         <section class="card section">
             <div class="section-head">
@@ -202,7 +238,9 @@
         </section>
       </div>
 
-      <!-- โซนหน้าอื่นๆ -->
+      <!-- ========================================== -->
+      <!-- หน้าอื่นๆ -->
+      <!-- ========================================== -->
       <div id="page-other" class="content-view">
         <section class="card section" style="text-align: center; padding: 100px 20px;">
           <h2 id="otherPageHeading" style="font-size: 24px; margin-bottom: 10px;">...</h2>
@@ -222,25 +260,21 @@
     document.getElementById('askAi').onclick = () => { document.getElementById('chat').scrollIntoView({behavior:'smooth',block:'center'}); document.getElementById('question').focus(); };
 
     // ==========================================
-    // 🔐 1. ระบบ Login ด้วย LocalStorage
+    // 🔐 ระบบ Login
     // ==========================================
     const loginPage = document.getElementById('login-page');
     const mainApp = document.getElementById('main-app');
     const loginError = document.getElementById('loginError');
 
-    // ตรวจสอบว่าเคยล็อกอินไว้หรือยัง
     if(localStorage.getItem('isLoggedIn') === 'true') {
         loginPage.style.display = 'none';
         mainApp.style.display = 'grid';
     }
 
-    // ฟังก์ชันกดปุ่มเข้าสู่ระบบ
     document.getElementById('loginForm').addEventListener('submit', (e) => {
         e.preventDefault();
         const user = document.getElementById('username').value;
         const pass = document.getElementById('password').value;
-        
-        // กำหนด Username/Password สำหรับโปรเจกต์
         if(user === 'admin' && pass === '1234') {
             localStorage.setItem('isLoggedIn', 'true');
             loginPage.style.display = 'none';
@@ -251,7 +285,6 @@
         }
     });
 
-    // ฟังก์ชันออกจากระบบ
     document.getElementById('logoutBtn').addEventListener('click', () => {
         localStorage.setItem('isLoggedIn', 'false');
         mainApp.style.display = 'none';
@@ -261,13 +294,10 @@
     });
 
     // ==========================================
-    // 🤖 2. ระบบ AI ของแท้ (เชื่อมต่อ Google Gemini API)
+    // 🤖 ระบบ AI (Gemini)
     // ==========================================
-    // ⚠️ ข้อควรระวัง: สำหรับโปรเจกต์ส่งอาจารย์ การใส่ API Key ไว้ใน HTML โดยตรง
-    // สามารถทำได้เพื่อเป็น "Prototype" แต่ห้ามนำโค้ดนี้ไปใช้งานทางธุรกิจจริงเด็ดขาด
-    
-    // ใส่ API KEY ของคุณตรงนี้ (รับฟรีได้ที่เว็บ: aistudio.google.com)
-    const GEMINI_API_KEY = 'ใส่_API_KEY_ของคุณที่นี่'; 
+    // ⚠️ นำ API Key มาใส่ตรงนี้
+    const GEMINI_API_KEY = 'AQ.Ab8RN6LrZ7h8qW8Auppf3aYEiD03vxU7sIHQS3vMfpgNPq81eg'; 
 
     document.getElementById('chatForm').addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -280,17 +310,14 @@
       input.value = '';
       messages.scrollTop = messages.scrollHeight;
       
-      // แสดงสถานะกำลังโหลด
       const loadingId = 'loading-' + Date.now();
       messages.insertAdjacentHTML('beforeend', `<div class="message bot loading-ai" id="${loadingId}">กำลังค้นหาข้อมูลจาก Google AI...</div>`);
       messages.scrollTop = messages.scrollHeight;
 
       try {
         if(GEMINI_API_KEY === 'ใส่_API_KEY_ของคุณที่นี่') {
-           throw new Error("คุณยังไม่ได้ใส่ API Key ของ Google Gemini ลงในระบบโค้ดค่ะ กรุณาไปสมัครและนำโค้ดมาใส่ก่อนนะคะ");
+           throw new Error("กรุณาใส่ API Key ของ Google Gemini ก่อนค่ะ");
         }
-
-        // ยิงคำขอไปยังเซิร์ฟเวอร์ของ Google
         const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -298,18 +325,10 @@
                 contents: [{ parts: [{ text: "คุณคือผู้ช่วย AI ชื่อ Smart Coffee ประจำฝ่ายจัดซื้อ ตอบคำถามนี้เป็นภาษาไทยให้กระชับ: " + q }] }]
             })
         });
-
         const data = await response.json();
         const aiReply = data.candidates[0].content.parts[0].text;
-        
-        // ลบข้อความ "กำลังโหลด" แล้วใส่ข้อความจริง
         document.getElementById(loadingId).remove();
-        
-        // แปลง \n เป็นแท็ก <br> เพื่อขึ้นบรรทัดใหม่
-        const formattedReply = aiReply.replace(/\n/g, '<br>');
-        
-        messages.insertAdjacentHTML('beforeend', `<div class="message bot">${formattedReply}<div class="source">ข้อมูลตอบกลับจาก: Google Gemini AI</div></div>`);
-        
+        messages.insertAdjacentHTML('beforeend', `<div class="message bot">${aiReply.replace(/\n/g, '<br>')}<div class="source">ข้อมูลตอบกลับจาก: Google Gemini AI</div></div>`);
       } catch (error) {
         document.getElementById(loadingId).remove();
         messages.insertAdjacentHTML('beforeend', `<div class="message bot" style="color:red;">เกิดข้อผิดพลาด: ${error.message}</div>`);
@@ -317,9 +336,8 @@
       messages.scrollTop = messages.scrollHeight;
     });
 
-
     // ==========================================
-    // 🟢 3. ระบบ Sidebar SPA และ ตารางต่างๆ (โค้ดส่วนเดิม)
+    // 🟢 ระบบ Sidebar และ Routing
     // ==========================================
     const defaultNavItems = [
       { id: 1, cat: 'Overview', ic: '▦', n: 'แดชบอร์ด' }, { id: 3, cat: 'Procurement', ic: '◫', n: 'คำขอจัดซื้อ' },
@@ -349,7 +367,10 @@
       activeMenuId = id; renderSidebar();
       document.getElementById('pageTitle').textContent = name; document.getElementById('pageDesc').textContent = 'ระบบจัดการข้อมูล ' + name;
       document.querySelectorAll('.content-view').forEach(el => el.classList.remove('active'));
+      
       if (name === 'แดชบอร์ด') { document.getElementById('page-dashboard').classList.add('active'); document.getElementById('pageDesc').textContent = 'ภาพรวมงานจัดซื้อเมล็ดกาแฟของคุณ'; } 
+      else if (name === 'คำขอจัดซื้อ') { document.getElementById('page-pr').classList.add('active'); }
+      else if (name === 'ใบสั่งซื้อ') { document.getElementById('page-po').classList.add('active'); }
       else if (name === 'ผู้จำหน่าย') { document.getElementById('page-supplier').classList.add('active'); } 
       else { document.getElementById('page-other').classList.add('active'); document.getElementById('otherPageHeading').textContent = 'ส่วนแสดงผลข้อมูล: ' + name; }
     };
@@ -364,29 +385,82 @@
     document.getElementById('toggleEditModeBtn').addEventListener('click', () => { document.getElementById('dynamicNav').classList.toggle('editing'); document.getElementById('newMenuForm').classList.toggle('active'); });
     document.getElementById('newMenuForm').addEventListener('submit', (e) => { e.preventDefault(); navItems.push({ id: Date.now(), ic: document.getElementById('newMenuIcon').value.trim(), n: document.getElementById('newMenuName').value.trim(), cat: document.getElementById('newMenuCategory').value }); localStorage.setItem('smartCoffeeNav', JSON.stringify(navItems)); renderSidebar(); document.getElementById('newMenuForm').reset(); toast('เพิ่มเมนูใหม่สำเร็จ!'); });
 
+    // ==========================================
+    // 🟢 ระบบตาราง (ผู้จำหน่าย)
+    // ==========================================
     const defaultSuppliers = [{ id: 1, name: "เชียงใหม่ อาราบิก้า", contact: "081-999-XXXX", rating: 4.8 }, { id: 2, name: "Doi Chang Coffee", contact: "082-555-XXXX", rating: 4.5 }];
     let suppliers = JSON.parse(localStorage.getItem('coffeeSuppliers')) || defaultSuppliers;
     function renderSupplierTable() {
       const tbody = document.getElementById('supplierTableBody'); tbody.innerHTML = '';
-      if(suppliers.length === 0) { tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding: 20px;">ไม่มีข้อมูล</td></tr>`; return; }
+      if(suppliers.length === 0) { tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding: 20px;">ไม่มีข้อมูลผู้จำหน่าย</td></tr>`; return; }
       suppliers.forEach(sup => { tbody.innerHTML += `<tr><td class="supplier">${sup.name}</td><td>${sup.contact}</td><td><span style="color:#d87436;">★</span> ${sup.rating} / 5.0</td><td style="text-align: center;"><button class="btn-delete" onclick="deleteSupplier(${sup.id})">✖</button></td></tr>`; });
     }
-    window.deleteSupplier = function(id) { if(confirm('ต้องการลบข้อมูล?')) { suppliers = suppliers.filter(s => s.id !== id); localStorage.setItem('coffeeSuppliers', JSON.stringify(suppliers)); renderSupplierTable(); } };
+    window.deleteSupplier = function(id) { if(confirm('ต้องการลบข้อมูล?')) { suppliers = suppliers.filter(s => s.id !== id); localStorage.setItem('coffeeSuppliers', JSON.stringify(suppliers)); renderSupplierTable(); toast('ลบข้อมูลเรียบร้อย');} };
     document.getElementById('toggleSupplierFormBtn').addEventListener('click', () => document.getElementById('addSupplierForm').classList.toggle('active'));
     document.getElementById('addSupplierForm').addEventListener('submit', e => { e.preventDefault(); suppliers.unshift({ id: Date.now(), name: document.getElementById('inputSupName').value.trim(), contact: document.getElementById('inputSupContact').value.trim(), rating: document.getElementById('inputSupRating').value.trim() }); localStorage.setItem('coffeeSuppliers', JSON.stringify(suppliers)); renderSupplierTable(); document.getElementById('addSupplierForm').reset(); document.getElementById('addSupplierForm').classList.remove('active'); toast('เพิ่มผู้จำหน่ายแล้ว'); });
 
-    const defaultOrders = [{ id: 1, po: "PO-2607-024", supplier: "เชียงใหม่ อาราบิก้า", item: "เมล็ดคั่วกลาง", status: "pending", statusText: "รอส่งสินค้า" }];
-    let orders = JSON.parse(localStorage.getItem('coffeeOrders')) || defaultOrders;
-    function renderTable() {
-      const tbody = document.getElementById('orderTableBody'); tbody.innerHTML = '';
-      if(orders.length === 0) { tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding: 20px;">ไม่มีข้อมูล</td></tr>`; return; }
-      orders.forEach(order => { tbody.innerHTML += `<tr><td>${order.po}</td><td class="supplier">${order.supplier}</td><td>${order.item}</td><td><span class="pill ${order.status}">${order.statusText}</span></td><td style="text-align: center;"><button class="btn-delete" onclick="deleteOrder(${order.id})">✖</button></td></tr>`; });
-    }
-    window.deleteOrder = function(id) { if(confirm('ต้องการลบ?')) { orders = orders.filter(o => o.id !== id); localStorage.setItem('coffeeOrders', JSON.stringify(orders)); renderTable(); } };
-    document.getElementById('toggleFormBtn').addEventListener('click', () => document.getElementById('addOrderForm').classList.toggle('active'));
-    document.getElementById('addOrderForm').addEventListener('submit', e => { e.preventDefault(); orders.unshift({ id: Date.now(), po: document.getElementById('inputPo').value.trim(), supplier: document.getElementById('inputSupplierOrder').value.trim(), item: document.getElementById('inputItem').value.trim(), status: "pending", statusText: "รอดำเนินการ" }); localStorage.setItem('coffeeOrders', JSON.stringify(orders)); renderTable(); document.getElementById('addOrderForm').reset(); document.getElementById('addOrderForm').classList.remove('active'); toast('เพิ่มคำสั่งซื้อเรียบร้อย'); });
 
-    renderSidebar(); renderTable(); renderSupplierTable();
+    // ==========================================
+    // 🟢 ระบบตาราง (คำขอจัดซื้อ - PR)
+    // ==========================================
+    const defaultPRs = [{ id: 1, pr: "PR-2608-012", item: "เครื่องบดเมล็ดกาแฟ", dept: "Barista", status: "review", statusText: "รอหัวหน้าอนุมัติ" }];
+    let prs = JSON.parse(localStorage.getItem('coffeePRs')) || defaultPRs;
+    function renderPrTable() {
+      const tbody = document.getElementById('prTableBody'); tbody.innerHTML = '';
+      if(prs.length === 0) { tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding: 20px;">ไม่มีข้อมูลคำขอ</td></tr>`; return; }
+      prs.forEach(pr => { tbody.innerHTML += `<tr><td>${pr.pr}</td><td class="supplier">${pr.item}</td><td>${pr.dept}</td><td><span class="pill ${pr.status}">${pr.statusText}</span></td><td style="text-align: center;"><button class="btn-delete" onclick="deletePR(${pr.id})">✖</button></td></tr>`; });
+    }
+    window.deletePR = function(id) { if(confirm('ต้องการลบคำขอจัดซื้อนี้?')) { prs = prs.filter(p => p.id !== id); localStorage.setItem('coffeePRs', JSON.stringify(prs)); renderPrTable(); toast('ลบ PR แล้ว');} };
+    document.getElementById('togglePrFormBtn').addEventListener('click', () => document.getElementById('addPrForm').classList.toggle('active'));
+    document.getElementById('addPrForm').addEventListener('submit', e => { e.preventDefault(); prs.unshift({ id: Date.now(), pr: document.getElementById('inputPrNo').value.trim(), item: document.getElementById('inputPrItem').value.trim(), dept: document.getElementById('inputPrDept').value.trim(), status: "review", statusText: "รอตรวจสอบ" }); localStorage.setItem('coffeePRs', JSON.stringify(prs)); renderPrTable(); document.getElementById('addPrForm').reset(); document.getElementById('addPrForm').classList.remove('active'); toast('สร้าง PR เรียบร้อย'); });
+
+
+    // ==========================================
+    // 🟢 ระบบตาราง (ใบสั่งซื้อ - PO) ใช้ร่วมกัน 2 หน้า
+    // ==========================================
+    const defaultOrders = [{ id: 1, po: "PO-2607-024", supplier: "เชียงใหม่ อาราบิก้า", item: "เมล็ดคั่วกลาง", status: "pending", statusText: "รอส่งสินค้า" }, { id: 2, po: "PO-2607-023", supplier: "Doi Chang Coffee", item: "เมล็ดพิเศษ", status: "approved", statusText: "อนุมัติแล้ว" }];
+    let orders = JSON.parse(localStorage.getItem('coffeeOrders')) || defaultOrders;
+    
+    function renderPoTables() {
+      const dbBody = document.getElementById('dashboardOrderTableBody');
+      const poBody = document.getElementById('poPageTableBody');
+      dbBody.innerHTML = ''; poBody.innerHTML = '';
+      
+      document.getElementById('metricPoCount').textContent = orders.length; // อัปเดตตัวเลขหน้า Dashboard
+
+      if(orders.length === 0) { 
+          const empty = `<tr><td colspan="5" style="text-align:center; padding: 20px;">ไม่มีข้อมูลคำสั่งซื้อ</td></tr>`;
+          dbBody.innerHTML = empty; poBody.innerHTML = empty; return; 
+      }
+      
+      orders.forEach((order, index) => { 
+        const rowHTML = `<tr><td>${order.po}</td><td class="supplier">${order.supplier}</td><td>${order.item}</td><td><span class="pill ${order.status}">${order.statusText}</span></td>`;
+        // หน้า Dashboard โชว์แค่ 3 รายการล่าสุด และไม่มีปุ่มลบ
+        if(index < 3) { dbBody.innerHTML += rowHTML + `</tr>`; }
+        // หน้า PO โชว์ทั้งหมดและมีปุ่มลบ
+        poBody.innerHTML += rowHTML + `<td style="text-align: center;"><button class="btn-delete" onclick="deleteOrder(${order.id})">✖</button></td></tr>`; 
+      });
+    }
+
+    window.deleteOrder = function(id) { if(confirm('ต้องการลบใบสั่งซื้อนี้?')) { orders = orders.filter(o => o.id !== id); localStorage.setItem('coffeeOrders', JSON.stringify(orders)); renderPoTables(); toast('ลบ PO แล้ว');} };
+    document.getElementById('togglePoFormBtn').addEventListener('click', () => document.getElementById('addPoForm').classList.toggle('active'));
+    document.getElementById('addPoForm').addEventListener('submit', e => { 
+        e.preventDefault(); 
+        const statusVal = document.getElementById('inputPoStatus').value;
+        const statusText = document.getElementById('inputPoStatus').options[document.getElementById('inputPoStatus').selectedIndex].text;
+        
+        orders.unshift({ id: Date.now(), po: document.getElementById('inputPoNo').value.trim(), supplier: document.getElementById('inputPoSupplier').value.trim(), item: document.getElementById('inputPoItem').value.trim(), status: statusVal, statusText: statusText }); 
+        localStorage.setItem('coffeeOrders', JSON.stringify(orders)); 
+        renderPoTables(); 
+        document.getElementById('addPoForm').reset(); document.getElementById('addPoForm').classList.remove('active'); 
+        toast('สร้างใบสั่งซื้อเรียบร้อย'); 
+    });
+
+    // เริ่มทำงานเมื่อเปิดเว็บ
+    renderSidebar(); 
+    renderPoTables(); 
+    renderPrTable();
+    renderSupplierTable();
   </script>
 </body>
 </html>
