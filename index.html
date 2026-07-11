@@ -111,7 +111,6 @@
             <h1 id="pageTitle">แดชบอร์ด</h1>
             <p id="pageDesc">ภาพรวมงานจัดซื้อเมล็ดกาแฟของคุณ</p>
         </div>
-        <!-- ⏱️ แสดงเวลาแบบ Real-time -->
         <div class="date" id="today">กำลังโหลดเวลา...</div>
       </header>
 
@@ -142,12 +141,12 @@
           </section>
 
           <section class="card section chat" id="chat">
-            <div class="section-head"><h3>✦ ผู้ช่วยจัดซื้อ AI (Real-time DB)</h3><span class="pill approved" style="background:#e8f0fe; color:#1a73e8;">เชื่อมต่อข้อมูลล่าสุด</span></div>
+            <div class="section-head"><h3>✦ ผู้ช่วยจัดซื้อ AI (Google Gemini)</h3><span class="pill approved" style="background:#e8f0fe; color:#1a73e8;">เชื่อมต่อ Real-time</span></div>
             <div class="messages" id="messages">
-              <div class="message bot">สวัสดีค่ะ ฉันคือ AI ประจำระบบจัดซื้อที่เชื่อมต่อกับฐานข้อมูลแบบ Real-time ลองถามฉันเกี่ยวกับรายชื่อ "ผู้จำหน่าย" ทั้งหมด หรือให้ "สรุปยอด" ใบสั่งซื้อดูสิคะ!</div>
+              <div class="message bot">สวัสดีค่ะ ฉันคือ AI ของ Google Gemini ที่อ่านข้อมูลในระบบของคุณได้แบบ Real-time ลองตั้งคำถามอะไรก็ได้เกี่ยวกับการจัดซื้อดูสิคะ!</div>
             </div>
             <form class="chat-form" id="chatForm">
-              <input id="question" placeholder="พิมพ์คำถาม... (เช่น มีผู้จำหน่ายอะไรบ้าง?, สรุปยอด PO ให้หน่อย)" autocomplete="off" />
+              <input id="question" placeholder="พิมพ์คำถาม... (ถามได้ทุกเรื่องเกี่ยวกับข้อมูลในระบบ)" autocomplete="off" />
               <button class="send">ส่ง</button>
             </form>
           </section>
@@ -308,8 +307,12 @@
     let prs = JSON.parse(localStorage.getItem('coffeePRs')) || defaultPRs;
     let orders = JSON.parse(localStorage.getItem('coffeeOrders')) || defaultOrders;
 
-    // 🤖 ระบบ AI อัจฉริยะ (อ่านข้อมูลตารางแบบ Real-time)
-    document.getElementById('chatForm').addEventListener('submit', (e) => {
+    // ==========================================
+    // 🤖 ระบบ AI (Google Gemini ของแท้ + ส่งข้อมูลระบบให้ AI อ่าน!)
+    // ==========================================
+    const GEMINI_API_KEY = 'AIzaSyBnX8_d_IP7kXTw9tTFbYjpmzGVi_p1dyA'; 
+
+    document.getElementById('chatForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const input = document.getElementById('question');
       const q = input.value.trim();
@@ -317,58 +320,67 @@
       
       const messages = document.getElementById('messages');
       messages.insertAdjacentHTML('beforeend', `<div class="message user">${q}</div>`);
-      input.value = ''; messages.scrollTop = messages.scrollHeight;
+      input.value = '';
+      messages.scrollTop = messages.scrollHeight;
       
       const loadingId = 'loading-' + Date.now();
-      messages.insertAdjacentHTML('beforeend', `<div class="message bot loading-ai" id="${loadingId}">กำลังดึงข้อมูลล่าสุดจากฐานข้อมูล...</div>`);
+      messages.insertAdjacentHTML('beforeend', `<div class="message bot loading-ai" id="${loadingId}">AI กำลังวิเคราะห์ข้อมูลระบบของคุณ...</div>`);
       messages.scrollTop = messages.scrollHeight;
 
-      setTimeout(() => {
-          document.getElementById(loadingId).remove();
-          
-          // ⭐️ พระเอกอยู่ตรงนี้: ดึงข้อมูลจริงล่าสุด ณ วินาทีนั้น มาใช้วิเคราะห์!
-          const currentSuppliers = JSON.parse(localStorage.getItem('coffeeSuppliers')) || defaultSuppliers;
-          const currentOrders = JSON.parse(localStorage.getItem('coffeeOrders')) || defaultOrders;
-          const currentPRs = JSON.parse(localStorage.getItem('coffeePRs')) || defaultPRs;
-          
-          let reply = "ขออภัยค่ะ ฉันยังไม่ค่อยเข้าใจ ลองถามคำว่า 'ผู้จำหน่ายทั้งหมด', 'สรุปใบสั่งซื้อ', หรือ 'มีคำขอ PR ไหม' ดูนะคะ";
-          
-          if(q.includes("ผู้จำหน่าย") || q.includes("บริษัท") || q.includes("ใครบ้าง") || q.includes("ซัพพลายเออร์")) {
-              if(currentSuppliers.length === 0) {
-                  reply = "ตอนนี้ยังไม่มีข้อมูลผู้จำหน่ายในระบบเลยค่ะ คุณสามารถไปเพิ่มได้ที่เมนู 'ผู้จำหน่าย' ทางด้านซ้ายนะคะ";
-              } else {
-                  const supNames = currentSuppliers.map(s => `• <b>${s.name}</b> (เรตติ้ง: ⭐${s.rating})`).join("<br>");
-                  reply = `ข้อมูลล่าสุด! ตอนนี้เรามีผู้จำหน่ายในระบบทั้งหมด <b>${currentSuppliers.length} เจ้า</b> ดังนี้ค่ะ:<br>${supNames}`;
-              }
-          } else if(q.includes("สรุป") || q.includes("ยอด") || q.includes("อัปเดต") || q.includes("ใบสั่งซื้อ") || q.includes("PO") || q.includes("เอกสาร")) {
-              reply = `📊 สรุปข้อมูลล่าสุด ณ ปัจจุบัน:<br>- มีใบสั่งซื้อ (PO) ในระบบรวม: <b>${currentOrders.length} รายการ</b><br>- มีคำขอจัดซื้อ (PR) รอตรวจสอบ: <b>${currentPRs.length} รายการ</b><br>- มีเอกสารจัดเก็บในคลัง: <b>${docs.length} ไฟล์</b>ค่ะ`;
-          } else if(q.includes("กาแฟ") || q.includes("เมล็ด") || q.includes("สินค้า")) {
-              if(currentOrders.length === 0) {
-                  reply = "ยังไม่มีประวัติการสั่งซื้อสินค้าในระบบเลยค่ะ ลองไปเปิด PO ใบแรกดูนะคะ";
-              } else {
-                  const allItems = currentOrders.map(o => o.item).join(", ");
-                  reply = `จากประวัติใบสั่งซื้อที่เปิดอยู่ตอนนี้ เรากำลังสั่งซื้อรายการดังนี้ค่ะ: <b>${allItems}</b>`;
-              }
-          } else if(q.includes("สวัสดี")) {
-              reply = "สวัสดีค่ะคุณพิชญา! ฉันเชื่อมต่อกับระบบฐานข้อมูลเรียบร้อยแล้วค่ะ อยากให้ฉันช่วยสรุปข้อมูลผู้จำหน่ายล่าสุดให้ไหมคะ?";
-          } else if(q.includes("ขอบคุณ")) {
-              reply = "ยินดีเสมอค่ะ! หากมีการเพิ่มผู้จำหน่ายใหม่หรือเปิด PO ใหม่ ถามฉันเพื่อสรุปข้อมูลได้ตลอดเวลาเลยนะคะ ☕";
-          }
+      try {
+        // ⭐️ สร้างข้อความสรุปข้อมูลปัจจุบันในระบบ เพื่อส่งให้ AI อ่านก่อนตอบ
+        const currentSuppliers = JSON.parse(localStorage.getItem('coffeeSuppliers')) || defaultSuppliers;
+        const currentOrders = JSON.parse(localStorage.getItem('coffeeOrders')) || defaultOrders;
+        const currentPRs = JSON.parse(localStorage.getItem('coffeePRs')) || defaultPRs;
+        
+        let systemData = `ข้อมูลล่าสุดในระบบ Smart Coffee ตอนนี้:\n`;
+        systemData += `- รายชื่อผู้จำหน่าย: ${currentSuppliers.map(s => s.name + ' (คะแนน ' + s.rating + ')').join(', ')}\n`;
+        systemData += `- ใบสั่งซื้อ (PO) ที่มี: ${currentOrders.map(o => o.po + ' สั่ง ' + o.item + ' จาก ' + o.supplier).join(', ')}\n`;
+        systemData += `- คำขอซื้อ (PR) ที่มี: ${currentPRs.map(p => p.pr + ' รายการ ' + p.item).join(', ')}\n`;
+        
+        // บอกให้ AI สวมบทบาทและใช้ข้อมูลด้านบนตอบคำถาม
+        const promptText = `คุณคือ AI Assistant ชื่อ Smart Coffee ประจำฝ่ายจัดซื้อ. นี่คือ ${systemData}. \nคำถามจากผู้ใช้: ${q} \n(คำสั่ง: ตอบเป็นภาษาไทยให้กระชับ เป็นธรรมชาติ และอ้างอิงข้อมูลในระบบที่มี ถ้าถามนอกเรื่องทั่วไปก็ตอบได้ตามปกติแต่อยู่ในบริบทสุภาพ)`;
 
-          const snippet = reply.replace(/<br>/g, " ").replace(/<[^>]*>?/gm, '').substring(0, 35); 
-          
-          messages.insertAdjacentHTML('beforeend', `
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                contents: [{ parts: [{ text: promptText }] }]
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (!response.ok) {
+            throw new Error(data.error?.message || "เชื่อมต่อ Google API ไม่สำเร็จ");
+        }
+        
+        if (data.candidates && data.candidates.length > 0) {
+            const aiReply = data.candidates[0].content.parts[0].text;
+            document.getElementById(loadingId).remove();
+            
+            // ตัดคำมาตั้งเป็นชื่อเวลาเซฟลงคลังเอกสาร
+            const snippet = aiReply.replace(/<br>/g, " ").replace(/<[^>]*>?/gm, '').substring(0, 30).replace(/["']/g, ""); 
+            
+            messages.insertAdjacentHTML('beforeend', `
             <div class="message bot">
-                ${reply}
+                ${aiReply.replace(/\n/g, '<br>')}
                 <div class="source" style="margin-top: 10px; border-top: 1px dashed #d9cbbf; padding-top: 5px; display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
-                    AI (อัปเดตข้อมูล Real-time สำเร็จ)
+                    Google Gemini AI (อ้างอิงข้อมูล Real-time)
                     <button onclick="saveAiToDocs('${snippet}')" style="margin-left:auto; padding:4px 8px; font-size:11px; cursor:pointer; background:var(--sage); color:white; border:none; border-radius:4px;">
                         💾 บันทึกลงคลังเอกสาร
                     </button>
                 </div>
             </div>`);
-          messages.scrollTop = messages.scrollHeight;
-      }, 1000); 
+        } else {
+            throw new Error("Google ไม่ส่งข้อมูลกลับมา กรุณาลองใหม่ค่ะ");
+        }
+        
+      } catch (error) {
+        document.getElementById(loadingId).remove();
+        messages.insertAdjacentHTML('beforeend', `<div class="message bot" style="color:red; background:#fff0df;">❌ เกิดข้อผิดพลาด: ${error.message}</div>`);
+      }
+      messages.scrollTop = messages.scrollHeight;
     });
 
 
