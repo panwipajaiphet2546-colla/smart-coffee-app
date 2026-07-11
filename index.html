@@ -46,7 +46,7 @@
     /* 📄 ส่วนเนื้อหาหลัก */
     main { padding:29px 36px 36px; max-width:1500px; width:100%; margin:auto; } 
     header { display:flex; justify-content:space-between; align-items:center; margin-bottom:27px; border-bottom: 1px solid var(--line); padding-bottom: 20px; }
-    h1 { font-size:27px; margin:0; letter-spacing:-.04em; } header p { margin:5px 0 0; color:var(--muted); font-size:14px; } .date { color:var(--muted); font-size:13px; }
+    h1 { font-size:27px; margin:0; letter-spacing:-.04em; } header p { margin:5px 0 0; color:var(--muted); font-size:14px; } .date { color:var(--muted); font-size:13px; font-weight: 500; }
     
     .content-view { display: none; animation: fadeIn 0.3s ease; } .content-view.active { display: block; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -125,7 +125,8 @@
             <h1 id="pageTitle">แดชบอร์ด</h1>
             <p id="pageDesc">ภาพรวมงานจัดซื้อเมล็ดกาแฟของคุณ</p>
         </div>
-        <div class="date" id="today"></div>
+        <!-- ⏱️ จุดแสดงเวลาแบบ Real-time -->
+        <div class="date" id="today">กำลังโหลดเวลา...</div>
       </header>
 
       <!-- 1. หน้าแดชบอร์ด -->
@@ -276,10 +277,30 @@
   <div class="toast" id="toast"></div>
 
   <script>
-    const thaiDate = new Intl.DateTimeFormat('th-TH',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(new Date());
-    document.getElementById('today').textContent = thaiDate;
+    // ==========================================
+    // ⏱️ ระบบอัปเดตเวลาแบบ Real-time (เดินตลอดเวลา)
+    // ==========================================
+    function updateClock() {
+        const now = new Date();
+        const options = { weekday:'long', day:'numeric', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit', second:'2-digit' };
+        document.getElementById('today').textContent = new Intl.DateTimeFormat('th-TH', options).format(now) + " น.";
+    }
+    setInterval(updateClock, 1000);
+    updateClock(); // เรียกใช้ครั้งแรกทันที
+
     const toast = (text) => { const e = document.getElementById('toast'); e.textContent = text; e.classList.add('show'); setTimeout(() => e.classList.remove('show'), 2600); };
     document.getElementById('askAi').onclick = () => { document.getElementById('chat').scrollIntoView({behavior:'smooth',block:'center'}); document.getElementById('question').focus(); };
+
+    // ==========================================
+    // 🔄 ระบบ Sync ข้อมูลอัตโนมัติ (อัปเดตข้ามแท็บ Real-time)
+    // ==========================================
+    window.addEventListener('storage', (e) => {
+        if(e.key === 'coffeeOrders') { orders = JSON.parse(e.newValue) || defaultOrders; renderPoTables(); }
+        if(e.key === 'coffeePRs') { prs = JSON.parse(e.newValue) || defaultPRs; renderPrTable(); }
+        if(e.key === 'coffeeSuppliers') { suppliers = JSON.parse(e.newValue) || defaultSuppliers; renderSupplierTable(); }
+        if(e.key === 'coffeeDocs') { docs = JSON.parse(e.newValue) || defaultDocs; renderDocTable(); }
+        if(e.key === 'smartCoffeeNav') { navItems = JSON.parse(e.newValue) || defaultNavItems; renderSidebar(); }
+    });
 
     // ==========================================
     // 🔐 1. ระบบ Login
@@ -522,7 +543,6 @@
         renderPoTables(); document.getElementById('addPoForm').reset(); document.getElementById('addPoForm').classList.remove('active'); toast('สร้างใบสั่งซื้อเรียบร้อย'); 
     });
 
-    // เริ่มทำงานเมื่อเปิดเว็บทั้งหมด
     renderSidebar(); renderPoTables(); renderPrTable(); renderSupplierTable(); renderDocTable();
   </script>
 </body>
